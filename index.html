@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Application Exam Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap');
+
+  :root {
+    --bg: #0d0f18;
+    --surface: #13162a;
+    --card: #1a1f38;
+    --border: #252a45;
+    --php: #8892bf;
+    --php-glow: rgba(136,146,191,0.15);
+    --js: #f7df1e;
+    --js-glow: rgba(247,223,30,0.12);
+    --mvc: #e84393;
+    --mvc-glow: rgba(232,67,147,0.12);
+    --text: #e8eaf6;
+    --muted: #7b82a8;
+    --code-bg: #0a0c14;
+    --accent: #64ffda;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f18 0%, #13162a 50%, #1a1025 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(100,255,218,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(136,146,191,0.06) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display:inline-block;
+    background: rgba(100,255,218,0.1);
+    border: 1px solid rgba(100,255,218,0.3);
+    color: var(--accent);
+    font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    padding: 5px 16px; border-radius:20px; margin-bottom:20px;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .hero h1 {
+    font-size: clamp(28px,5vw,52px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size:15px; max-width:500px; margin:0 auto 32px; }
+
+  /* MARKS PILLS */
+  .marks-row {
+    display: flex; flex-wrap: wrap; justify-content:center; gap:12px; margin-bottom:8px;
+  }
+  .mark-pill {
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 20px; border-radius:30px;
+    font-size:13px; font-weight:600;
+    border: 1px solid;
+  }
+  .mark-pill.php { background: var(--php-glow); border-color: var(--php); color: var(--php); }
+  .mark-pill.js  { background: var(--js-glow);  border-color: var(--js);  color: var(--js); }
+  .mark-pill.mvc { background: var(--mvc-glow); border-color: var(--mvc); color: var(--mvc); }
+  .mark-pill .num { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; }
+
+  /* NAV */
+  .sticky-nav {
+    position: sticky; top:0; z-index:100;
+    background: rgba(13,15,24,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; gap:4px; padding: 10px 20px;
+    overflow-x:auto;
+  }
+  .nav-btn {
+    flex-shrink:0;
+    background:none; border: 1px solid transparent;
+    color:var(--muted); font-family:'Sora',sans-serif;
+    font-size:12px; font-weight:600; letter-spacing:.5px;
+    padding: 7px 16px; border-radius:20px; cursor:pointer;
+    transition: all .2s;
+  }
+  .nav-btn:hover { color:var(--text); border-color:var(--border); }
+  .nav-btn.php  { color:var(--php); border-color:var(--php); background:var(--php-glow); }
+  .nav-btn.js   { color:var(--js);  border-color:var(--js);  background:var(--js-glow); }
+  .nav-btn.mvc  { color:var(--mvc); border-color:var(--mvc); background:var(--mvc-glow); }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin:0 auto; padding: 40px 20px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display:flex; align-items:center; gap:16px;
+    margin-bottom: 32px; padding-bottom:16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width:48px; height:48px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; flex-shrink:0;
+  }
+  .section-icon.php { background:var(--php-glow); border:1px solid var(--php); }
+  .section-icon.js  { background:var(--js-glow);  border:1px solid var(--js); }
+  .section-icon.mvc { background:var(--mvc-glow); border:1px solid var(--mvc); }
+  .section-title h2 { font-size:24px; font-weight:800; }
+  .section-title .marks-tag {
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:1px; text-transform:uppercase;
+    color: var(--muted); margin-top:2px;
+  }
+
+  /* TOPIC CARD */
+  .topic-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: border-color .2s;
+  }
+  .topic-card:hover { border-color: #353c60; }
+  .topic-card h3 {
+    font-size:16px; font-weight:700;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .topic-card h3 .tag {
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px; padding:2px 8px; border-radius:4px;
+    font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  }
+  .tag.php { background:var(--php-glow); color:var(--php); border:1px solid var(--php); }
+  .tag.js  { background:var(--js-glow);  color:var(--js);  border:1px solid var(--js); }
+  .tag.mvc { background:var(--mvc-glow); color:var(--mvc); border:1px solid var(--mvc); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0;
+  }
+  .code-header {
+    background: #111420;
+    padding: 8px 16px;
+    display:flex; justify-content:space-between; align-items:center;
+    border-bottom: 1px solid var(--border);
+  }
+  .code-lang {
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
+  }
+  .code-dots { display:flex; gap:5px; }
+  .dot { width:9px; height:9px; border-radius:50%; }
+  .dot:nth-child(1){background:#ff5f57;} .dot:nth-child(2){background:#febc2e;} .dot:nth-child(3){background:#28c840;}
+  pre {
+    padding: 18px;
+    overflow-x: auto;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    line-height: 1.8;
+    color: #c9d1d9;
+  }
+  /* Syntax highlight colors */
+  .kw { color:#ff79c6; } /* keywords */
+  .fn { color:#50fa7b; } /* functions */
+  .st { color:#f1fa8c; } /* strings */
+  .cm { color:#6272a4; font-style:italic; } /* comments */
+  .nu { color:#bd93f9; } /* numbers */
+  .va { color:#8be9fd; } /* variables */
+  .op { color:#ff79c6; } /* operators */
+  .cl { color:#ffb86c; } /* class names */
+
+  /* EXPLANATION */
+  .explain {
+    color: var(--muted);
+    font-size:14px;
+    margin: 10px 0;
+    line-height:1.8;
+  }
+  .explain strong { color: var(--text); }
+
+  /* GRID */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:14px 0; }
+  @media(max-width:600px){ .two-col { grid-template-columns:1fr; } }
+
+  /* MINI CARD */
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:10px; padding:16px;
+  }
+  .mini-card h4 { font-size:13px; font-weight:700; margin-bottom:8px; color:var(--accent); }
+  .mini-card ul { padding-left:16px; }
+  .mini-card li { font-size:13px; color:var(--muted); margin-bottom:4px; }
+  .mini-card li strong { color:var(--text); }
+
+  /* TIP BOX */
+  .tip-box {
+    display:flex; gap:12px; align-items:flex-start;
+    background: rgba(100,255,218,0.05);
+    border: 1px solid rgba(100,255,218,0.2);
+    border-radius:10px; padding:14px 16px; margin:16px 0;
+  }
+  .tip-box .tip-icon { font-size:18px; flex-shrink:0; margin-top:2px; }
+  .tip-box p { font-size:13px; color:var(--muted); }
+  .tip-box p strong { color: var(--accent); }
+
+  /* WARN BOX */
+  .warn-box {
+    display:flex; gap:12px; align-items:flex-start;
+    background: rgba(247,223,30,0.05);
+    border: 1px solid rgba(247,223,30,0.2);
+    border-radius:10px; padding:14px 16px; margin:16px 0;
+  }
+  .warn-box .tip-icon { font-size:18px; flex-shrink:0; margin-top:2px; }
+  .warn-box p { font-size:13px; color:var(--muted); }
+  .warn-box p strong { color: var(--js); }
+
+  /* MVC DIAGRAM */
+  .mvc-diagram {
+    display:flex; align-items:center; justify-content:center;
+    flex-wrap:wrap; gap:12px; padding:24px; margin:16px 0;
+    background:var(--code-bg); border-radius:12px; border:1px solid var(--border);
+  }
+  .mvc-box {
+    background: var(--card);
+    border-radius:10px; padding:16px 20px;
+    text-align:center; min-width:130px;
+    border: 2px solid;
+  }
+  .mvc-box.m { border-color:var(--php); }
+  .mvc-box.v { border-color:var(--js); }
+  .mvc-box.c { border-color:var(--mvc); }
+  .mvc-box .letter { font-size:28px; font-weight:800; font-family:'JetBrains Mono',monospace; }
+  .mvc-box.m .letter { color:var(--php); }
+  .mvc-box.v .letter { color:var(--js); }
+  .mvc-box.c .letter { color:var(--mvc); }
+  .mvc-box .word { font-size:13px; font-weight:700; margin:2px 0; }
+  .mvc-box .desc { font-size:11px; color:var(--muted); }
+  .mvc-arrow { font-size:22px; color:var(--muted); }
+
+  /* DIVIDER */
+  .divider { height:1px; background:var(--border); margin:40px 0; }
+
+  /* CRUD TABLE */
+  .crud-table { width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; }
+  .crud-table th { background:#111420; padding:10px 14px; text-align:left; color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+  .crud-table td { padding:10px 14px; border-top:1px solid var(--border); color:var(--muted); }
+  .crud-table td strong { color:var(--text); }
+  .crud-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* FOOTER */
+  .footer { text-align:center; padding:40px 20px; color:var(--muted); font-size:12px; border-top:1px solid var(--border); }
+  .footer span { color:var(--accent); }
+
+  /* SCROLL SMOOTH */
+  html { scroll-behavior:smooth; }
+
+  /* SECTION SPACING */
+  section { padding-top: 20px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📚 Exam Study Guide</div>
+  <h1>Web Application<br><span>Course Exam Prep</span></h1>
+  <p>Everything you need to know — clearly explained with real code examples.</p>
+  <div class="marks-row">
+    <div class="mark-pill php"><span class="num">25</span> marks · PHP</div>
+    <div class="mark-pill js"><span class="num">10</span> marks · JavaScript</div>
+    <div class="mark-pill mvc"><span class="num">5</span> marks · MVC / Laravel</div>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <button class="nav-btn php" onclick="scrollTo('php')">🐘 PHP Basics</button>
+  <button class="nav-btn php" onclick="scrollTo('forms')">📋 PHP Forms</button>
+  <button class="nav-btn php" onclick="scrollTo('oop')">🏛️ OOP</button>
+  <button class="nav-btn php" onclick="scrollTo('mysql')">🗄️ MySQL CRUD</button>
+  <button class="nav-btn js"  onclick="scrollTo('js')">⚡ JavaScript</button>
+  <button class="nav-btn mvc" onclick="scrollTo('mvc')">🏗️ MVC Laravel</button>
+</nav>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — PHP
+══════════════════════════════════════════ -->
+<section id="php">
+  <div class="section-header">
+    <div class="section-icon php">🐘</div>
+    <div class="section-title">
+      <h2>PHP — Basic PHP</h2>
+      <div class="marks-tag">Part of 25 marks</div>
+    </div>
+  </div>
+
+  <!-- Variables & Data Types -->
+  <div class="topic-card">
+    <h3>Variables &amp; Data Types <span class="tag php">PHP</span></h3>
+    <p class="explain">In PHP, variables start with <strong>$</strong>. PHP is loosely typed — you don't declare the type.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// Variable types</span>
+<span class="va">$name</span>   = <span class="st">"Alice"</span>;         <span class="cm">// String</span>
+<span class="va">$age</span>    = <span class="nu">22</span>;              <span class="cm">// Integer</span>
+<span class="va">$gpa</span>    = <span class="nu">3.85</span>;            <span class="cm">// Float</span>
+<span class="va">$passed</span> = <span class="kw">true</span>;            <span class="cm">// Boolean</span>
+<span class="va">$grades</span> = [<span class="nu">85</span>, <span class="nu">90</span>, <span class="nu">78</span>];  <span class="cm">// Array</span>
+
+<span class="cm">// Output</span>
+<span class="fn">echo</span> <span class="st">"Name: $name, Age: $age"</span>;
+
+<span class="cm">// String concatenation</span>
+<span class="fn">echo</span> <span class="st">"Hello "</span> . <span class="va">$name</span> . <span class="st">"!"</span>;
+
+<span class="cm">// Useful functions</span>
+<span class="fn">strlen</span>(<span class="va">$name</span>);        <span class="cm">// string length</span>
+<span class="fn">strtoupper</span>(<span class="va">$name</span>);   <span class="cm">// ALICE</span>
+<span class="fn">strtolower</span>(<span class="va">$name</span>);   <span class="cm">// alice</span>
+<span class="fn">count</span>(<span class="va">$grades</span>);      <span class="cm">// 3</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- Control Flow -->
+  <div class="topic-card">
+    <h3>Control Flow — if / else / loops <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// if-else</span>
+<span class="va">$marks</span> = <span class="nu">75</span>;
+<span class="kw">if</span> (<span class="va">$marks</span> &gt;= <span class="nu">80</span>) {
+    <span class="fn">echo</span> <span class="st">"A grade"</span>;
+} <span class="kw">elseif</span> (<span class="va">$marks</span> &gt;= <span class="nu">60</span>) {
+    <span class="fn">echo</span> <span class="st">"B grade"</span>;
+} <span class="kw">else</span> {
+    <span class="fn">echo</span> <span class="st">"C grade"</span>;
+}
+
+<span class="cm">// for loop</span>
+<span class="kw">for</span> (<span class="va">$i</span> = <span class="nu">1</span>; <span class="va">$i</span> &lt;= <span class="nu">5</span>; <span class="va">$i</span>++) {
+    <span class="fn">echo</span> <span class="va">$i</span> . <span class="st">" "</span>;   <span class="cm">// 1 2 3 4 5</span>
+}
+
+<span class="cm">// foreach — great for arrays</span>
+<span class="va">$fruits</span> = [<span class="st">"apple"</span>, <span class="st">"mango"</span>, <span class="st">"banana"</span>];
+<span class="kw">foreach</span> (<span class="va">$fruits</span> <span class="kw">as</span> <span class="va">$fruit</span>) {
+    <span class="fn">echo</span> <span class="va">$fruit</span> . <span class="st">"&lt;br&gt;"</span>;
+}
+
+<span class="cm">// while loop</span>
+<span class="va">$n</span> = <span class="nu">1</span>;
+<span class="kw">while</span> (<span class="va">$n</span> &lt;= <span class="nu">3</span>) {
+    <span class="fn">echo</span> <span class="va">$n</span>++;
+}
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- Functions -->
+  <div class="topic-card">
+    <h3>Functions <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// Define a function</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="va">$name</span>) {
+    <span class="kw">return</span> <span class="st">"Hello, $name!"</span>;
+}
+<span class="fn">echo</span> <span class="fn">greet</span>(<span class="st">"Bob"</span>);   <span class="cm">// Hello, Bob!</span>
+
+<span class="cm">// Default parameter</span>
+<span class="kw">function</span> <span class="fn">add</span>(<span class="va">$a</span>, <span class="va">$b</span> = <span class="nu">10</span>) {
+    <span class="kw">return</span> <span class="va">$a</span> + <span class="va">$b</span>;
+}
+<span class="fn">echo</span> <span class="fn">add</span>(<span class="nu">5</span>);      <span class="cm">// 15</span>
+<span class="fn">echo</span> <span class="fn">add</span>(<span class="nu">5</span>, <span class="nu">3</span>);  <span class="cm">// 8</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — PHP FORMS
+══════════════════════════════════════════ -->
+<section id="forms">
+  <div class="section-header">
+    <div class="section-icon php">📋</div>
+    <div class="section-title">
+      <h2>PHP Forms</h2>
+      <div class="marks-tag">Part of 25 marks</div>
+    </div>
+  </div>
+
+  <div class="topic-card">
+    <h3>GET vs POST <span class="tag php">PHP</span></h3>
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>$_GET</h4>
+        <ul>
+          <li>Data appears in <strong>URL</strong></li>
+          <li>Used for <strong>searching/filtering</strong></li>
+          <li>Not secure for passwords</li>
+          <li><strong>?name=Alice&age=22</strong></li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>$_POST</h4>
+        <ul>
+          <li>Data hidden in <strong>request body</strong></li>
+          <li>Used for <strong>login, register, forms</strong></li>
+          <li>More secure</li>
+          <li>No data in URL</li>
+        </ul>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">html + php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;!-- HTML Form (form.html) --&gt;</span>
+&lt;<span class="kw">form</span> action=<span class="st">"process.php"</span> method=<span class="st">"POST"</span>&gt;
+  &lt;<span class="kw">input</span> type=<span class="st">"text"</span> name=<span class="st">"username"</span> placeholder=<span class="st">"Your name"</span>&gt;
+  &lt;<span class="kw">input</span> type=<span class="st">"password"</span> name=<span class="st">"password"</span>&gt;
+  &lt;<span class="kw">button</span> type=<span class="st">"submit"</span>&gt;Login&lt;/<span class="kw">button</span>&gt;
+&lt;/<span class="kw">form</span>&gt;
+
+<span class="cm">&lt;?php  // process.php</span>
+<span class="kw">if</span> (<span class="va">$_SERVER</span>[<span class="st">"REQUEST_METHOD"</span>] == <span class="st">"POST"</span>) {
+    <span class="va">$username</span> = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">"username"</span>]);
+    <span class="va">$password</span> = <span class="va">$_POST</span>[<span class="st">"password"</span>];
+
+    <span class="fn">echo</span> <span class="st">"Welcome, $username"</span>;
+}
+<span class="cm">?&gt;</span></pre>
+    </div>
+    <div class="tip-box">
+      <div class="tip-icon">💡</div>
+      <p><strong>htmlspecialchars()</strong> converts special characters like &lt; and &gt; into safe HTML entities. Always use it to prevent XSS attacks when displaying user input.</p>
+    </div>
+  </div>
+
+  <!-- Form Validation -->
+  <div class="topic-card">
+    <h3>Form Validation <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="va">$error</span> = <span class="st">""</span>;
+<span class="kw">if</span> (<span class="va">$_SERVER</span>[<span class="st">"REQUEST_METHOD"</span>] == <span class="st">"POST"</span>) {
+    <span class="va">$email</span> = <span class="fn">trim</span>(<span class="va">$_POST</span>[<span class="st">"email"</span>]);
+    <span class="va">$age</span>   = <span class="va">$_POST</span>[<span class="st">"age"</span>];
+
+    <span class="cm">// Check empty</span>
+    <span class="kw">if</span> (<span class="fn">empty</span>(<span class="va">$email</span>)) {
+        <span class="va">$error</span> = <span class="st">"Email is required"</span>;
+    }
+    <span class="cm">// Validate email format</span>
+    <span class="kw">elseif</span> (!<span class="fn">filter_var</span>(<span class="va">$email</span>, <span class="kw">FILTER_VALIDATE_EMAIL</span>)) {
+        <span class="va">$error</span> = <span class="st">"Invalid email format"</span>;
+    }
+    <span class="cm">// Validate age is numeric</span>
+    <span class="kw">elseif</span> (!<span class="fn">is_numeric</span>(<span class="va">$age</span>) || <span class="va">$age</span> &lt; <span class="nu">1</span>) {
+        <span class="va">$error</span> = <span class="st">"Enter a valid age"</span>;
+    } <span class="kw">else</span> {
+        <span class="fn">echo</span> <span class="st">"Valid! Email: $email"</span>;
+    }
+}
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — OOP
+══════════════════════════════════════════ -->
+<section id="oop">
+  <div class="section-header">
+    <div class="section-icon php">🏛️</div>
+    <div class="section-title">
+      <h2>PHP OOP</h2>
+      <div class="marks-tag">Object-Oriented Programming · Part of 25 marks</div>
+    </div>
+  </div>
+
+  <div class="topic-card">
+    <h3>Class, Object, Constructor <span class="tag php">PHP</span></h3>
+    <p class="explain">A <strong>class</strong> is a blueprint. An <strong>object</strong> is a real instance created from that blueprint. The <strong>constructor</strong> runs automatically when you create an object.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">class</span> <span class="cl">Student</span> {
+    <span class="cm">// Properties (variables inside class)</span>
+    <span class="kw">public</span> <span class="va">$name</span>;
+    <span class="kw">public</span> <span class="va">$age</span>;
+    <span class="kw">private</span> <span class="va">$gpa</span>;  <span class="cm">// only accessible inside class</span>
+
+    <span class="cm">// Constructor — called when object is created</span>
+    <span class="kw">public function</span> <span class="fn">__construct</span>(<span class="va">$name</span>, <span class="va">$age</span>, <span class="va">$gpa</span>) {
+        <span class="va">$this</span>-&gt;name = <span class="va">$name</span>;
+        <span class="va">$this</span>-&gt;age  = <span class="va">$age</span>;
+        <span class="va">$this</span>-&gt;gpa  = <span class="va">$gpa</span>;
+    }
+
+    <span class="cm">// Method (function inside class)</span>
+    <span class="kw">public function</span> <span class="fn">introduce</span>() {
+        <span class="kw">return</span> <span class="st">"I am {$this-&gt;name}, age {$this-&gt;age}"</span>;
+    }
+
+    <span class="cm">// Getter for private property</span>
+    <span class="kw">public function</span> <span class="fn">getGpa</span>() {
+        <span class="kw">return</span> <span class="va">$this</span>-&gt;gpa;
+    }
+}
+
+<span class="cm">// Create objects</span>
+<span class="va">$s1</span> = <span class="kw">new</span> <span class="cl">Student</span>(<span class="st">"Alice"</span>, <span class="nu">21</span>, <span class="nu">3.9</span>);
+<span class="va">$s2</span> = <span class="kw">new</span> <span class="cl">Student</span>(<span class="st">"Bob"</span>, <span class="nu">22</span>, <span class="nu">3.5</span>);
+
+<span class="fn">echo</span> <span class="va">$s1</span>-&gt;<span class="fn">introduce</span>();  <span class="cm">// I am Alice, age 21</span>
+<span class="fn">echo</span> <span class="va">$s1</span>-&gt;<span class="fn">getGpa</span>();    <span class="cm">// 3.9</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>Access Modifiers</h4>
+        <ul>
+          <li><strong>public</strong> — accessible everywhere</li>
+          <li><strong>private</strong> — only inside the class</li>
+          <li><strong>protected</strong> — inside class + child classes</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>Key Keywords</h4>
+        <ul>
+          <li><strong>$this</strong> — refers to current object</li>
+          <li><strong>new</strong> — creates an object</li>
+          <li><strong>-&gt;</strong> — access property/method</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inheritance -->
+  <div class="topic-card">
+    <h3>Inheritance <span class="tag php">PHP</span></h3>
+    <p class="explain">A child class <strong>extends</strong> a parent class and inherits all its public/protected properties and methods. Use <strong>parent::</strong> to call the parent constructor.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">class</span> <span class="cl">Animal</span> {
+    <span class="kw">public</span> <span class="va">$name</span>;
+    <span class="kw">public function</span> <span class="fn">__construct</span>(<span class="va">$name</span>) {
+        <span class="va">$this</span>-&gt;name = <span class="va">$name</span>;
+    }
+    <span class="kw">public function</span> <span class="fn">speak</span>() {
+        <span class="kw">return</span> <span class="st">"..."</span>;
+    }
+}
+
+<span class="cm">// Dog EXTENDS Animal (inherits everything)</span>
+<span class="kw">class</span> <span class="cl">Dog</span> <span class="kw">extends</span> <span class="cl">Animal</span> {
+    <span class="kw">public</span> <span class="va">$breed</span>;
+    <span class="kw">public function</span> <span class="fn">__construct</span>(<span class="va">$name</span>, <span class="va">$breed</span>) {
+        <span class="kw">parent</span>::<span class="fn">__construct</span>(<span class="va">$name</span>); <span class="cm">// call parent constructor</span>
+        <span class="va">$this</span>-&gt;breed = <span class="va">$breed</span>;
+    }
+    <span class="cm">// Override parent method</span>
+    <span class="kw">public function</span> <span class="fn">speak</span>() {
+        <span class="kw">return</span> <span class="st">"{$this-&gt;name} says: Woof!"</span>;
+    }
+}
+
+<span class="va">$dog</span> = <span class="kw">new</span> <span class="cl">Dog</span>(<span class="st">"Rex"</span>, <span class="st">"Labrador"</span>);
+<span class="fn">echo</span> <span class="va">$dog</span>-&gt;<span class="fn">speak</span>();   <span class="cm">// Rex says: Woof!</span>
+<span class="fn">echo</span> <span class="va">$dog</span>-&gt;breed;    <span class="cm">// Labrador</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — MySQL CRUD
+══════════════════════════════════════════ -->
+<section id="mysql">
+  <div class="section-header">
+    <div class="section-icon php">🗄️</div>
+    <div class="section-title">
+      <h2>MySQL CRUD with PHP</h2>
+      <div class="marks-tag">Create · Read · Update · Delete · Part of 25 marks</div>
+    </div>
+  </div>
+
+  <div class="topic-card">
+    <h3>CRUD Quick Reference <span class="tag php">SQL</span></h3>
+    <table class="crud-table">
+      <tr><th>Operation</th><th>SQL Statement</th><th>Purpose</th></tr>
+      <tr><td><strong>CREATE</strong></td><td><code>INSERT INTO</code></td><td>Add new record</td></tr>
+      <tr><td><strong>READ</strong></td><td><code>SELECT ... FROM</code></td><td>Fetch records</td></tr>
+      <tr><td><strong>UPDATE</strong></td><td><code>UPDATE ... SET</code></td><td>Modify existing record</td></tr>
+      <tr><td><strong>DELETE</strong></td><td><code>DELETE FROM</code></td><td>Remove record</td></tr>
+    </table>
+  </div>
+
+  <!-- Connect -->
+  <div class="topic-card">
+    <h3>Step 1 — Connect to Database <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php (mysqli)</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="va">$host</span> = <span class="st">"localhost"</span>;
+<span class="va">$user</span> = <span class="st">"root"</span>;
+<span class="va">$pass</span> = <span class="st">""</span>;
+<span class="va">$db</span>   = <span class="st">"school"</span>;
+
+<span class="va">$conn</span> = <span class="kw">new</span> <span class="cl">mysqli</span>(<span class="va">$host</span>, <span class="va">$user</span>, <span class="va">$pass</span>, <span class="va">$db</span>);
+
+<span class="kw">if</span> (<span class="va">$conn</span>-&gt;connect_error) {
+    <span class="fn">die</span>(<span class="st">"Connection failed: "</span> . <span class="va">$conn</span>-&gt;connect_error);
+}
+<span class="fn">echo</span> <span class="st">"Connected!"</span>;
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- CREATE -->
+  <div class="topic-card">
+    <h3>CREATE — Insert Data <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="va">$name</span> = <span class="st">"Alice"</span>;
+<span class="va">$age</span>  = <span class="nu">21</span>;
+
+<span class="cm">// Prepared statement (SAFE — prevents SQL Injection)</span>
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"INSERT INTO students (name, age) VALUES (?, ?)"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"si"</span>, <span class="va">$name</span>, <span class="va">$age</span>); <span class="cm">// s=string, i=integer</span>
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+
+<span class="fn">echo</span> <span class="st">"Record inserted! ID: "</span> . <span class="va">$conn</span>-&gt;insert_id;
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- READ -->
+  <div class="topic-card">
+    <h3>READ — Fetch Data <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// Fetch ALL students</span>
+<span class="va">$result</span> = <span class="va">$conn</span>-&gt;<span class="fn">query</span>(<span class="st">"SELECT * FROM students"</span>);
+
+<span class="kw">while</span> (<span class="va">$row</span> = <span class="va">$result</span>-&gt;<span class="fn">fetch_assoc</span>()) {
+    <span class="fn">echo</span> <span class="va">$row</span>[<span class="st">"id"</span>] . <span class="st">" - "</span> . <span class="va">$row</span>[<span class="st">"name"</span>] . <span class="st">"&lt;br&gt;"</span>;
+}
+
+<span class="cm">// Fetch ONE student by ID (prepared)</span>
+<span class="va">$id</span>   = <span class="nu">1</span>;
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"SELECT * FROM students WHERE id = ?"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"i"</span>, <span class="va">$id</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+<span class="va">$result</span> = <span class="va">$stmt</span>-&gt;<span class="fn">get_result</span>();
+<span class="va">$student</span> = <span class="va">$result</span>-&gt;<span class="fn">fetch_assoc</span>();
+
+<span class="fn">echo</span> <span class="va">$student</span>[<span class="st">"name"</span>];
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- UPDATE -->
+  <div class="topic-card">
+    <h3>UPDATE — Modify Data <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="va">$newName</span> = <span class="st">"Alice Smith"</span>;
+<span class="va">$id</span>      = <span class="nu">1</span>;
+
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"UPDATE students SET name = ? WHERE id = ?"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"si"</span>, <span class="va">$newName</span>, <span class="va">$id</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+
+<span class="fn">echo</span> <span class="st">"Updated! Rows affected: "</span> . <span class="va">$stmt</span>-&gt;affected_rows;
+<span class="cm">?&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- DELETE -->
+  <div class="topic-card">
+    <h3>DELETE — Remove Data <span class="tag php">PHP</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="va">$id</span> = <span class="nu">1</span>;
+
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"DELETE FROM students WHERE id = ?"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"i"</span>, <span class="va">$id</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+
+<span class="fn">echo</span> <span class="st">"Deleted successfully!"</span>;
+<span class="va">$conn</span>-&gt;<span class="fn">close</span>(); <span class="cm">// Always close connection</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+    <div class="tip-box">
+      <div class="tip-icon">💡</div>
+      <p><strong>Always use prepared statements</strong> (prepare + bind_param + execute) when taking user input. Never do: <code>query("SELECT * WHERE id = $_GET['id']")</code> — that's SQL injection risk!</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 5 — JAVASCRIPT
+══════════════════════════════════════════ -->
+<section id="js">
+  <div class="section-header">
+    <div class="section-icon js">⚡</div>
+    <div class="section-title">
+      <h2>JavaScript</h2>
+      <div class="marks-tag">DOM Events · Arrays of Objects · Event Listeners · Nested Objects · 10 marks</div>
+    </div>
+  </div>
+
+  <!-- DOM Events -->
+  <div class="topic-card">
+    <h3>DOM Events &amp; getElementById <span class="tag js">JS</span></h3>
+    <p class="explain">The <strong>DOM (Document Object Model)</strong> is the HTML page as a tree of objects. JavaScript can select elements and change them.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">javascript</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">// Select elements</span>
+<span class="kw">const</span> <span class="va">box</span>  = <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"myBox"</span>);
+<span class="kw">const</span> <span class="va">items</span> = <span class="va">document</span>.<span class="fn">querySelectorAll</span>(<span class="st">".item"</span>);
+
+<span class="cm">// Change content &amp; style</span>
+<span class="va">box</span>.innerHTML = <span class="st">"&lt;b&gt;Updated!&lt;/b&gt;"</span>;
+<span class="va">box</span>.style.color = <span class="st">"red"</span>;
+<span class="va">box</span>.style.display = <span class="st">"none"</span>;  <span class="cm">// hide</span>
+
+<span class="cm">// Change attribute</span>
+<span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"img1"</span>).src = <span class="st">"new.jpg"</span>;</pre>
+    </div>
+  </div>
+
+  <!-- Event Listeners -->
+  <div class="topic-card">
+    <h3>Event Listeners <span class="tag js">JS</span></h3>
+    <p class="explain">Event listeners let you run code when something happens — click, hover, typing, etc.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">javascript</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">// Method 1: addEventListener (best practice)</span>
+<span class="kw">const</span> <span class="va">btn</span> = <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"myBtn"</span>);
+
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">"click"</span>, <span class="kw">function</span>() {
+    <span class="fn">alert</span>(<span class="st">"Button clicked!"</span>);
+});
+
+<span class="cm">// Arrow function style</span>
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">"click"</span>, () =&gt; {
+    <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"output"</span>).textContent = <span class="st">"Clicked!"</span>;
+});
+
+<span class="cm">// Common events</span>
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">"mouseover"</span>, () =&gt; { <span class="cm">/* hover */</span> });
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">"mouseout"</span>,  () =&gt; { <span class="cm">/* mouse leaves */</span> });
+
+<span class="kw">const</span> <span class="va">input</span> = <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"txtBox"</span>);
+<span class="va">input</span>.<span class="fn">addEventListener</span>(<span class="st">"input"</span>, (e) =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">"Typed:"</span>, e.target.value);
+});
+
+<span class="va">input</span>.<span class="fn">addEventListener</span>(<span class="st">"keydown"</span>, (e) =&gt; {
+    <span class="kw">if</span> (e.key === <span class="st">"Enter"</span>) <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">"Enter pressed"</span>);
+});</pre>
+    </div>
+  </div>
+
+  <!-- Arrays of Objects -->
+  <div class="topic-card">
+    <h3>Arrays of Objects <span class="tag js">JS</span></h3>
+    <p class="explain">A very common pattern — a list (array) of records (objects). You'll need to loop, filter, and display them.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">javascript</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">// Array of objects</span>
+<span class="kw">const</span> <span class="va">students</span> = [
+    { id: <span class="nu">1</span>, name: <span class="st">"Alice"</span>, gpa: <span class="nu">3.9</span> },
+    { id: <span class="nu">2</span>, name: <span class="st">"Bob"</span>,   gpa: <span class="nu">3.5</span> },
+    { id: <span class="nu">3</span>, name: <span class="st">"Carol"</span>, gpa: <span class="nu">3.7</span> },
+];
+
+<span class="cm">// 1. Loop with forEach</span>
+<span class="va">students</span>.<span class="fn">forEach</span>(s =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(s.name, s.gpa);
+});
+
+<span class="cm">// 2. filter — get students with gpa &gt; 3.6</span>
+<span class="kw">const</span> <span class="va">topStudents</span> = <span class="va">students</span>.<span class="fn">filter</span>(s =&gt; s.gpa &gt; <span class="nu">3.6</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">topStudents</span>); <span class="cm">// Alice, Carol</span>
+
+<span class="cm">// 3. map — transform into new array</span>
+<span class="kw">const</span> <span class="va">names</span> = <span class="va">students</span>.<span class="fn">map</span>(s =&gt; s.name);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">names</span>); <span class="cm">// ["Alice", "Bob", "Carol"]</span>
+
+<span class="cm">// 4. find — get FIRST match</span>
+<span class="kw">const</span> <span class="va">bob</span> = <span class="va">students</span>.<span class="fn">find</span>(s =&gt; s.name === <span class="st">"Bob"</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">bob</span>); <span class="cm">// { id:2, name:"Bob", gpa:3.5 }</span>
+
+<span class="cm">// 5. Display in HTML</span>
+<span class="kw">const</span> <span class="va">list</span> = <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"studentList"</span>);
+<span class="va">students</span>.<span class="fn">forEach</span>(s =&gt; {
+    <span class="va">list</span>.innerHTML += <span class="st">`&lt;li&gt;${s.name} — GPA: ${s.gpa}&lt;/li&gt;`</span>;
+});</pre>
+    </div>
+  </div>
+
+  <!-- Nested Objects -->
+  <div class="topic-card">
+    <h3>Nested Objects <span class="tag js">JS</span></h3>
+    <p class="explain">Objects can contain other objects (or arrays) inside them. Access nested values with dot notation or bracket notation.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">javascript</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">// Nested object</span>
+<span class="kw">const</span> <span class="va">student</span> = {
+    name: <span class="st">"Alice"</span>,
+    age: <span class="nu">21</span>,
+    address: {              <span class="cm">// nested object</span>
+        city: <span class="st">"Dhaka"</span>,
+        zip: <span class="st">"1207"</span>
+    },
+    courses: [              <span class="cm">// array inside object</span>
+        { code: <span class="st">"CS101"</span>, grade: <span class="st">"A"</span> },
+        { code: <span class="st">"CS202"</span>, grade: <span class="st">"B+"</span> }
+    ]
+};
+
+<span class="cm">// Access nested data</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">student</span>.name);              <span class="cm">// Alice</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">student</span>.address.city);      <span class="cm">// Dhaka</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">student</span>.courses[<span class="nu">0</span>].code);  <span class="cm">// CS101</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">student</span>.courses[<span class="nu">1</span>].grade); <span class="cm">// B+</span>
+
+<span class="cm">// Loop through nested array</span>
+<span class="va">student</span>.courses.<span class="fn">forEach</span>(c =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">`${c.code}: ${c.grade}`</span>);
+});
+
+<span class="cm">// Modify nested value</span>
+<span class="va">student</span>.address.city = <span class="st">"Chittagong"</span>;</pre>
+    </div>
+  </div>
+
+  <!-- Combined Example -->
+  <div class="topic-card">
+    <h3>Full Combined Example — Events + DOM + Arrays <span class="tag js">JS</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">html + javascript</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre>&lt;<span class="kw">input</span> id=<span class="st">"search"</span> placeholder=<span class="st">"Search student..."</span>&gt;
+&lt;<span class="kw">ul</span> id=<span class="st">"list"</span>&gt;&lt;/<span class="kw">ul</span>&gt;
+
+&lt;<span class="kw">script</span>&gt;
+<span class="kw">const</span> <span class="va">students</span> = [
+    { name: <span class="st">"Alice"</span>, dept: <span class="st">"CSE"</span> },
+    { name: <span class="st">"Bob"</span>,   dept: <span class="st">"EEE"</span> },
+    { name: <span class="st">"Carol"</span>, dept: <span class="st">"CSE"</span> },
+];
+
+<span class="kw">function</span> <span class="fn">renderList</span>(<span class="va">data</span>) {
+    <span class="kw">const</span> <span class="va">list</span> = <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"list"</span>);
+    <span class="va">list</span>.innerHTML = <span class="st">""</span>;
+    <span class="va">data</span>.<span class="fn">forEach</span>(s =&gt; {
+        <span class="va">list</span>.innerHTML += <span class="st">`&lt;li&gt;${s.name} — ${s.dept}&lt;/li&gt;`</span>;
+    });
+}
+
+<span class="fn">renderList</span>(<span class="va">students</span>); <span class="cm">// initial render</span>
+
+<span class="cm">// Live search on input event</span>
+<span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">"search"</span>)
+    .<span class="fn">addEventListener</span>(<span class="st">"input"</span>, (e) =&gt; {
+        <span class="kw">const</span> <span class="va">q</span> = e.target.value.<span class="fn">toLowerCase</span>();
+        <span class="kw">const</span> <span class="va">filtered</span> = <span class="va">students</span>.<span class="fn">filter</span>(s =&gt;
+            s.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(<span class="va">q</span>)
+        );
+        <span class="fn">renderList</span>(<span class="va">filtered</span>);
+    });
+&lt;/<span class="kw">script</span>&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 6 — MVC / LARAVEL
+══════════════════════════════════════════ -->
+<section id="mvc">
+  <div class="section-header">
+    <div class="section-icon mvc">🏗️</div>
+    <div class="section-title">
+      <h2>MVC Theory for Laravel</h2>
+      <div class="marks-tag">1 Theoretical Question · 5 marks</div>
+    </div>
+  </div>
+
+  <div class="topic-card">
+    <h3>What is MVC? <span class="tag mvc">Theory</span></h3>
+    <p class="explain"><strong>MVC stands for Model – View – Controller</strong>. It is a software design pattern that separates an application into three interconnected components so the code is organized, maintainable, and easy to scale.</p>
+
+    <!-- DIAGRAM -->
+    <div class="mvc-diagram">
+      <div class="mvc-box m">
+        <div class="letter">M</div>
+        <div class="word">Model</div>
+        <div class="desc">Data &amp; Database</div>
+      </div>
+      <div class="mvc-arrow">⇄</div>
+      <div class="mvc-box c">
+        <div class="letter">C</div>
+        <div class="word">Controller</div>
+        <div class="desc">Logic &amp; Bridge</div>
+      </div>
+      <div class="mvc-arrow">⇄</div>
+      <div class="mvc-box v">
+        <div class="letter">V</div>
+        <div class="word">View</div>
+        <div class="desc">UI &amp; HTML</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>🔷 Model</h4>
+        <ul>
+          <li>Represents the <strong>data</strong> and business logic</li>
+          <li>Interacts with the <strong>database</strong></li>
+          <li>In Laravel: Eloquent model class (e.g. <strong>Student.php</strong>)</li>
+          <li>Does NOT know about the UI</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>🟡 View</h4>
+        <ul>
+          <li>The <strong>UI</strong> shown to the user</li>
+          <li>HTML templates with dynamic data</li>
+          <li>In Laravel: <strong>Blade templates</strong> (.blade.php)</li>
+          <li>Does NOT contain business logic</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="mini-card">
+        <h4>🟣 Controller</h4>
+        <ul>
+          <li>The <strong>middleman</strong> between Model and View</li>
+          <li>Receives HTTP requests, processes logic, returns responses</li>
+          <li>In Laravel: a PHP class with methods (e.g. <strong>StudentController.php</strong>)</li>
+          <li>Tells the Model what data to fetch, then passes it to the View</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- How request flows -->
+  <div class="topic-card">
+    <h3>How a Request Flows in Laravel MVC <span class="tag mvc">Theory</span></h3>
+    <p class="explain">Here's what happens step by step when a user visits <code>yoursite.com/students</code>:</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">flow</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre>1. User opens browser → requests /students
+
+2. Laravel ROUTER (routes/web.php) matches the URL:
+   Route::get('/students', [StudentController::class, 'index']);
+
+3. CONTROLLER method runs (StudentController@index):
+   → asks the MODEL for data
+
+4. MODEL (Student.php - Eloquent):
+   → queries the database
+   → returns data to the Controller
+
+5. CONTROLLER passes data to the VIEW:
+   return view('students.index', ['students' => $students]);
+
+6. VIEW (resources/views/students/index.blade.php):
+   → renders HTML with the data
+   → sends the final HTML page to the user's browser</pre>
+    </div>
+  </div>
+
+  <!-- Laravel Code Examples -->
+  <div class="topic-card">
+    <h3>Laravel Code Examples <span class="tag mvc">Laravel</span></h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">routes/web.php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">// Route → maps URL to Controller method</span>
+<span class="cl">Route</span>::<span class="fn">get</span>(<span class="st">'/students'</span>, [<span class="cl">StudentController</span>::<span class="kw">class</span>, <span class="st">'index'</span>]);
+<span class="cl">Route</span>::<span class="fn">post</span>(<span class="st">'/students'</span>, [<span class="cl">StudentController</span>::<span class="kw">class</span>, <span class="st">'store'</span>]);</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">app/Http/Controllers/StudentController.php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="kw">class</span> <span class="cl">StudentController</span> <span class="kw">extends</span> <span class="cl">Controller</span> {
+
+    <span class="cm">// READ — show all students</span>
+    <span class="kw">public function</span> <span class="fn">index</span>() {
+        <span class="va">$students</span> = <span class="cl">Student</span>::<span class="fn">all</span>(); <span class="cm">// Model fetches data</span>
+        <span class="kw">return</span> <span class="fn">view</span>(<span class="st">'students.index'</span>, [<span class="st">'students'</span> =&gt; <span class="va">$students</span>]);
+    }
+
+    <span class="cm">// CREATE — save new student</span>
+    <span class="kw">public function</span> <span class="fn">store</span>(<span class="cl">Request</span> <span class="va">$request</span>) {
+        <span class="cl">Student</span>::<span class="fn">create</span>([
+            <span class="st">'name'</span> =&gt; <span class="va">$request</span>-&gt;name,
+            <span class="st">'age'</span>  =&gt; <span class="va">$request</span>-&gt;age,
+        ]);
+        <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">route</span>(<span class="st">'students.index'</span>);
+    }
+}</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">app/Models/Student.php</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="kw">class</span> <span class="cl">Student</span> <span class="kw">extends</span> <span class="cl">Model</span> {
+    <span class="cm">// Fillable = allowed to mass-assign</span>
+    <span class="kw">protected</span> <span class="va">$fillable</span> = [<span class="st">'name'</span>, <span class="st">'age'</span>];
+}
+<span class="cm">// That's it! Eloquent handles all SQL automatically.</span>
+<span class="cm">// Student::all() → SELECT * FROM students</span>
+<span class="cm">// Student::find(1) → SELECT * FROM students WHERE id=1</span></pre>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">resources/views/students/index.blade.php (View)</span><div class="code-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre>&lt;<span class="kw">h1</span>&gt;All Students&lt;/<span class="kw">h1</span>&gt;
+&lt;<span class="kw">ul</span>&gt;
+    @<span class="fn">foreach</span>(<span class="va">$students</span> <span class="kw">as</span> <span class="va">$student</span>)
+        &lt;<span class="kw">li</span>&gt;{{ <span class="va">$student</span>-&gt;name }} — {{ <span class="va">$student</span>-&gt;age }}&lt;/<span class="kw">li</span>&gt;
+    @<span class="fn">endforeach</span>
+&lt;/<span class="kw">ul</span>&gt;</pre>
+    </div>
+  </div>
+
+  <!-- Why MVC -->
+  <div class="topic-card">
+    <h3>Why Use MVC? — The 5-Mark Answer <span class="tag mvc">Exam</span></h3>
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>✅ Benefits</h4>
+        <ul>
+          <li><strong>Separation of concerns</strong> — each part has one job</li>
+          <li><strong>Easier to maintain</strong> — change UI without touching logic</li>
+          <li><strong>Team collaboration</strong> — designers work on Views, devs on Controllers</li>
+          <li><strong>Reusability</strong> — one Model used in many Views</li>
+          <li><strong>Testability</strong> — test each layer independently</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>📝 Sample Exam Answer</h4>
+        <ul>
+          <li>MVC separates an app into <strong>Model</strong> (data), <strong>View</strong> (UI), <strong>Controller</strong> (logic)</li>
+          <li>In Laravel, the <strong>Router</strong> directs requests to the Controller</li>
+          <li>The Controller queries the <strong>Eloquent Model</strong> for data</li>
+          <li>Data is passed to a <strong>Blade View</strong> for display</li>
+          <li>Benefits: organized code, easy maintenance, scalability</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn-box">
+      <div class="tip-icon">⭐</div>
+      <p><strong>Remember this simple sentence:</strong> "MVC separates the application into three parts — the Model handles data, the View handles display, and the Controller handles logic and acts as the bridge between them."</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<div class="footer">
+  <span> Abdullah Al Shovon</span>
+</div>
+
+<script>
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
