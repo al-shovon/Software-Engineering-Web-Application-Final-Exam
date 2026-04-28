@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SE321 — Web Application Exam Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a24;
+    --surface2: #1e2433;
+    --border: #2a3047;
+    --accent: #7ee8a2;
+    --accent2: #5bc8f5;
+    --accent3: #f7c948;
+    --accent4: #f47c7c;
+    --text: #e2e8f0;
+    --muted: #7a869a;
+    --code-bg: #111520;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #0d0f14 0%, #161a24 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(126,232,162,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  header .tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* Nav tabs */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 1rem 1.3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Panels */
+  .panel { display: none; padding: 2rem; max-width: 960px; margin: 0 auto; }
+  .panel.active { display: block; animation: fadeUp 0.35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    background: var(--accent);
+    color: #0d0f14;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .badge.blue { background: var(--accent2); }
+  .badge.yellow { background: var(--accent3); }
+  .badge.red { background: var(--accent4); }
+  .card-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .marks {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--accent3);
+    border: 1px solid var(--accent3);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    position: relative;
+    margin: 1rem 0;
+  }
+  pre .copy-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  pre .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+  pre .copy-btn.copied { color: var(--accent); }
+
+  /* Syntax colors */
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .cm { color: #546e7a; font-style: italic; }
+  .num { color: #f78c6c; }
+  .cls { color: #ffcb6b; }
+  .tag-c { color: #f07178; }
+  .attr { color: #c792ea; }
+  .var { color: var(--accent2); }
+
+  /* Interactive demo */
+  .demo-area {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    margin-top: 1rem;
+  }
+  .demo-area h4 {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .demo-area h4::before {
+    content: '▶';
+    font-size: 9px;
+  }
+
+  /* Buttons */
+  .btn {
+    background: var(--accent);
+    color: #0d0f14;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn:hover { background: #a8f0be; transform: translateY(-1px); }
+  .btn.blue { background: var(--accent2); }
+  .btn.blue:hover { background: #8ad6f7; }
+  .btn.yellow { background: var(--accent3); }
+  .btn.yellow:hover { background: #f9d46a; }
+
+  /* Form elements */
+  input, select, textarea {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    width: 100%;
+    margin-bottom: 0.6rem;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 0.25rem; }
+  .field { margin-bottom: 0.8rem; }
+
+  /* Output box */
+  .output {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.9rem;
+    min-height: 2.5rem;
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 0.8rem;
+    white-space: pre-wrap;
+  }
+  .output.info { color: var(--accent2); }
+
+  /* Explanation */
+  .explain {
+    background: rgba(126,232,162,0.05);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.2rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .explain p { margin-bottom: 0.4rem; }
+  .explain p:last-child { margin-bottom: 0; }
+  .explain strong { color: var(--accent); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 1rem 0; }
+  th { background: var(--surface2); color: var(--accent); padding: 0.6rem 0.9rem; text-align: left; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); }
+  td { padding: 0.6rem 0.9rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:nth-child(even) td { background: rgba(30,36,51,0.5); }
+
+  /* Image demo */
+  #demo-image {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: block;
+    width: 140px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(135deg, #1e2433, #2a3047);
+  }
+  #demo-image:hover { border-color: var(--accent); transform: scale(1.03); }
+  #demo-image.img2 { background: linear-gradient(135deg, #1a3322, #0d4a2e); border-color: var(--accent); }
+
+  .img-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    text-align: center;
+    width: 140px;
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-start;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+  }
+  .flow-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .flow-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 2px solid;
+    z-index: 1;
+    background: var(--bg);
+  }
+  .flow-dot.green { border-color: var(--accent); color: var(--accent); }
+  .flow-dot.blue { border-color: var(--accent2); color: var(--accent2); }
+  .flow-dot.yellow { border-color: var(--accent3); color: var(--accent3); }
+  .flow-dot.red { border-color: var(--accent4); color: var(--accent4); }
+  .flow-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+  .flow-content {
+    padding: 0.5rem 0 1rem 0;
+    flex: 1;
+  }
+  .flow-content strong { color: #fff; font-size: 13px; }
+  .flow-content p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .panel { padding: 1rem; }
+    nav button { padding: 0.8rem 0.9rem; font-size: 11px; }
+  }
+
+  .sep { height: 1px; background: var(--border); margin: 1.5rem 0; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 500px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">SE321 · Software Engineering Web Application · Summer 2025</div>
+  <h1>Exam Solutions</h1>
+  <p>Daffodil International University &nbsp;·&nbsp; Department of Software Engineering &nbsp;·&nbsp; Marks: 40</p>
+</header>
+
+<nav>
+  <button class="active" onclick="show('q1a')">Q1a — JS Events</button>
+  <button onclick="show('q2a')">Q2a — Click Event</button>
+  <button onclick="show('q2b')">Q2b — PHP Arrays</button>
+  <button onclick="show('q3a')">Q3a — PHP OOP</button>
+  <button onclick="show('q3b')">Q3b — Laravel MVC</button>
+  <button onclick="show('q3c')">Q3c — PHP MySQL</button>
+</nav>
+
+<!-- ======================= Q1a ======================= -->
+<div id="panel-q1a" class="panel active">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge">Q1 (a)</span>
+      <h2>JavaScript Event Listeners</h2>
+      <span class="marks">Marks-5 · CLO-2</span>
+    </div>
+
+    <div class="explain">
+      <p>JavaScript event listeners let you respond to user interactions. The <strong>addEventListener(event, callback)</strong> method attaches a handler to any DOM element without overwriting existing ones.</p>
+    </div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button><span class="cm">// 1. Click Event Listener</span>
+<span class="kw">const</span> <span class="var">btn</span> = document.<span class="fn">querySelector</span>(<span class="str">'button'</span>);
+btn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'Button clicked!'</span>);
+});
+
+<span class="cm">// 2. Mouseover Event Listener</span>
+btn.<span class="fn">addEventListener</span>(<span class="str">'mouseover'</span>, () => {
+  btn.style.background = <span class="str">'lightblue'</span>;
+});
+
+<span class="cm">// 3. Keydown Event Listener (on document)</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (<span class="var">e</span>) => {
+  console.<span class="fn">log</span>(<span class="str">'Key pressed: '</span> + e.key);
+});
+
+<span class="cm">// 4. Submit Event Listener</span>
+<span class="kw">const</span> <span class="var">form</span> = document.<span class="fn">querySelector</span>(<span class="str">'form'</span>);
+form.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, (<span class="var">e</span>) => {
+  e.<span class="fn">preventDefault</span>();  <span class="cm">// stop default form submit</span>
+  console.<span class="fn">log</span>(<span class="str">'Form submitted!'</span>);
+});
+
+<span class="cm">// 5. DOMContentLoaded — runs after HTML is parsed</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'DOMContentLoaded'</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'Page is ready!'</span>);
+});</pre>
+
+    <table>
+      <tr><th>Event Type</th><th>Trigger</th><th>Common Use Case</th></tr>
+      <tr><td><code>click</code></td><td>Mouse click on element</td><td>Buttons, links, toggles</td></tr>
+      <tr><td><code>mouseover</code></td><td>Mouse enters element</td><td>Hover effects, tooltips</td></tr>
+      <tr><td><code>keydown</code></td><td>Key pressed on keyboard</td><td>Shortcuts, form validation</td></tr>
+      <tr><td><code>submit</code></td><td>Form submission</td><td>Validate and send data</td></tr>
+      <tr><td><code>DOMContentLoaded</code></td><td>DOM fully parsed</td><td>Page initialization</td></tr>
+    </table>
+
+    <div class="demo-area">
+      <h4>Live Demo — Try All Events</h4>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1rem;">
+        <button class="btn" id="evtBtn">Click Me</button>
+        <button class="btn blue" id="hoverBtn">Hover Me</button>
+        <button class="btn yellow" id="keyBtn" onclick="document.getElementById('keyInput').focus()">Focus for Keydown</button>
+      </div>
+      <input id="keyInput" placeholder="Type here to test keydown..." style="max-width:300px;">
+      <div class="output info" id="evtOutput">Events will appear here...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= Q2a ======================= -->
+<div id="panel-q2a" class="panel">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge blue">Q2 (a)</span>
+      <h2>Image Click Event — JS Function</h2>
+      <span class="marks">Marks-5 · CLO-3</span>
+    </div>
+
+    <div class="explain">
+      <p>Attach a <strong>click event listener</strong> to an image element. On each click: swap the image source and increment a counter displayed in a <code>#count</code> span.</p>
+    </div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button><span class="tag-c">&lt;script&gt;</span>
+<span class="cm">// Wait for DOM to be ready</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+
+  <span class="kw">let</span> <span class="var">count</span> = <span class="num">0</span>;
+  <span class="kw">const</span> <span class="var">img</span>   = document.<span class="fn">getElementById</span>(<span class="str">'myImage'</span>);
+  <span class="kw">const</span> <span class="var">counter</span> = document.<span class="fn">getElementById</span>(<span class="str">'count'</span>);
+
+  img.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+
+    <span class="cm">// i. Toggle image source</span>
+    <span class="kw">if</span> (img.src.<span class="fn">includes</span>(<span class="str">'image1.jpg'</span>)) {
+      img.src = <span class="str">'image2.jpg'</span>;
+    } <span class="kw">else</span> {
+      img.src = <span class="str">'image1.jpg'</span>;
+    }
+
+    <span class="cm">// ii. Increment click counter</span>
+    count++;
+    counter.textContent = count;
+  });
+});
+<span class="tag-c">&lt;/script&gt;</span></pre>
+
+    <div class="demo-area">
+      <h4>Live Demo</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Click the image to toggle it and increment the counter.</p>
+      <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+        <div>
+          <div id="demo-image" onclick="handleImgClick()" title="Click me!">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;flex-direction:column;gap:4px;">
+              <span style="font-size:24px;">🖼️</span>
+              <span>image1.jpg</span>
+            </div>
+          </div>
+          <div class="img-label" id="imgLabel">image1.jpg</div>
+        </div>
+        <div>
+          <p style="font-size:13px;color:var(--muted);">Click Count:</p>
+          <p style="font-size:3rem;font-weight:700;color:var(--accent);font-family:'Fraunces',serif;" id="clickCount">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= Q2b ======================= -->
+<div id="panel-q2b" class="panel">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge yellow">Q2 (b)</span>
+      <h2>PHP — Average of Array Extremes</h2>
+      <span class="marks">Marks-5</span>
+    </div>
+
+    <div class="explain">
+      <p>Find the <strong>smallest</strong> value from the first array and the <strong>largest</strong> from the second, then return their <strong>average</strong>. Uses PHP's built-in <code>min()</code> and <code>max()</code> functions.</p>
+    </div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button><span class="tag-c">&lt;?php</span>
+
+<span class="kw">function</span> <span class="fn">averageOfExtremes</span>(<span class="var">$arr1</span>, <span class="var">$arr2</span>) {
+    <span class="cm">// Get smallest from first array</span>
+    <span class="var">$smallest</span> = <span class="fn">min</span>(<span class="var">$arr1</span>);
+
+    <span class="cm">// Get largest from second array</span>
+    <span class="var">$largest</span>  = <span class="fn">max</span>(<span class="var">$arr2</span>);
+
+    <span class="cm">// Calculate and return the average</span>
+    <span class="kw">return</span> (<span class="var">$smallest</span> + <span class="var">$largest</span>) / <span class="num">2</span>;
+}
+
+<span class="cm">// Example Usage</span>
+<span class="var">$arr1</span> = [<span class="num">4</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>, <span class="num">2</span>];
+<span class="var">$arr2</span> = [<span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">5</span>];
+
+<span class="fn">echo</span> <span class="fn">averageOfExtremes</span>(<span class="var">$arr1</span>, <span class="var">$arr2</span>);
+<span class="cm">// Output: 3   ( min($arr1)=1 , max($arr2)=5 → (1+5)/2 = 3 )</span>
+
+<span class="tag-c">?&gt;</span></pre>
+
+    <div class="demo-area">
+      <h4>Interactive PHP Logic Simulator</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Enter comma-separated numbers to test the logic (simulated in JS):</p>
+      <div class="grid2">
+        <div class="field">
+          <label>Array 1 (find smallest)</label>
+          <input id="phpArr1" value="4, 1, 2, 1, 2" placeholder="e.g. 4, 1, 2, 1, 2">
+        </div>
+        <div class="field">
+          <label>Array 2 (find largest)</label>
+          <input id="phpArr2" value="2, 2, 3, 3, 5" placeholder="e.g. 2, 2, 3, 3, 5">
+        </div>
+      </div>
+      <button class="btn yellow" onclick="runPhpAvg()">Run averageOfExtremes()</button>
+      <div class="output" id="phpOutput">Result will appear here...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= Q3a ======================= -->
+<div id="panel-q3a" class="panel">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge">Q3 (a)</span>
+      <h2>PHP OOP — Interface & Trait</h2>
+      <span class="marks">Marks-10 · CLO-4</span>
+    </div>
+
+    <div class="explain">
+      <p>This solution uses three PHP OOP concepts together: an <strong>Interface</strong> (contract for setNumbers), a <strong>Trait</strong> (reusable log method), and a <strong>Class</strong> (Addition) that implements and uses both.</p>
+    </div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button><span class="tag-c">&lt;?php</span>
+
+<span class="cm">// i. Interface — defines a contract</span>
+<span class="kw">interface</span> <span class="cls">Input</span> {
+    <span class="kw">public function</span> <span class="fn">setNumbers</span>(<span class="var">$a</span>, <span class="var">$b</span>);
+}
+
+<span class="cm">// ii. Trait — reusable block of methods</span>
+<span class="kw">trait</span> <span class="cls">Logger</span> {
+    <span class="kw">public function</span> <span class="fn">log</span>(<span class="var">$message</span>) {
+        <span class="fn">echo</span> <span class="str">"[LOG] "</span> . <span class="var">$message</span> . <span class="str">"\n"</span>;
+    }
+}
+
+<span class="cm">// iii. Class — implements interface, uses trait</span>
+<span class="kw">class</span> <span class="cls">Addition</span> <span class="kw">implements</span> <span class="cls">Input</span> {
+    <span class="kw">use</span> <span class="cls">Logger</span>;  <span class="cm">// Include Logger trait</span>
+
+    <span class="kw">private</span> <span class="var">$a</span>, <span class="var">$b</span>;
+
+    <span class="kw">public function</span> <span class="fn">setNumbers</span>(<span class="var">$a</span>, <span class="var">$b</span>) {
+        <span class="var">$this</span>-><span class="var">a</span> = <span class="var">$a</span>;
+        <span class="var">$this</span>-><span class="var">b</span> = <span class="var">$b</span>;
+        <span class="var">$this</span>-><span class="fn">log</span>(<span class="str">"Numbers set: {$a} and {$b}"</span>);
+    }
+
+    <span class="kw">public function</span> <span class="fn">add</span>() {
+        <span class="var">$sum</span> = <span class="var">$this</span>-><span class="var">a</span> + <span class="var">$this</span>-><span class="var">b</span>;
+        <span class="var">$this</span>-><span class="fn">log</span>(<span class="str">"Performing addition..."</span>);
+        <span class="kw">return</span> <span class="var">$sum</span>;
+    }
+}
+
+<span class="cm">// Instantiate and run</span>
+<span class="var">$calc</span> = <span class="kw">new</span> <span class="cls">Addition</span>();
+<span class="var">$calc</span>-><span class="fn">setNumbers</span>(<span class="num">15</span>, <span class="num">27</span>);
+<span class="var">$result</span> = <span class="var">$calc</span>-><span class="fn">add</span>();
+<span class="fn">echo</span> <span class="str">"Result: "</span> . <span class="var">$result</span> . <span class="str">"\n"</span>;
+
+<span class="cm">/* Output:
+   [LOG] Numbers set: 15 and 27
+   [LOG] Performing addition...
+   Result: 42
+*/</span>
+<span class="tag-c">?&gt;</span></pre>
+
+    <div class="demo-area">
+      <h4>OOP Logic Simulator</h4>
+      <div class="grid2">
+        <div class="field">
+          <label>Number A</label>
+          <input type="number" id="oopA" value="15">
+        </div>
+        <div class="field">
+          <label>Number B</label>
+          <input type="number" id="oopB" value="27">
+        </div>
+      </div>
+      <button class="btn" onclick="runOOP()">Run Addition::add()</button>
+      <div class="output" id="oopOutput">Logs will appear here...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= Q3b ======================= -->
+<div id="panel-q3b" class="panel">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge blue">Q3 (b)</span>
+      <h2>Laravel MVC — Request Flow Trace</h2>
+      <span class="marks">Marks-8</span>
+    </div>
+
+    <div class="explain">
+      <p>When a browser visits <strong>/product</strong>, Laravel processes the request through multiple layers. Each component has a distinct responsibility:</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot green">1</div><div class="flow-line"></div></div>
+        <div class="flow-content">
+          <strong>Browser Request → web.php (Router)</strong>
+          <p>HTTP GET /product hits Laravel's router. Route::get('/product', [ProductController::class, 'index'])->name('product.index') matches the URL and dispatches to ProductController@index.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot blue">2</div><div class="flow-line"></div></div>
+        <div class="flow-content">
+          <strong>ProductController — app/Http/Controllers/</strong>
+          <p>The Controller receives the request. Its index() method contains business logic. It calls the Model to fetch data, then returns a View response. It acts as the bridge between Model and View.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot yellow">3</div><div class="flow-line"></div></div>
+        <div class="flow-content">
+          <strong>Product Model — app/Models/</strong>
+          <p>Product::all() queries the database via Eloquent ORM. The Model represents the data layer; it maps to the products table and returns a Collection of Product objects.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot red">4</div><div class="flow-line"></div></div>
+        <div class="flow-content">
+          <strong>View — resources/views/products/index.blade.php</strong>
+          <p>view('products.index', compact('products')) renders the Blade template with the $products variable injected. Blade processes @foreach, @if directives and outputs final HTML.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot green">5</div></div>
+        <div class="flow-content">
+          <strong>HTML Response → Browser</strong>
+          <p>The compiled HTML is sent back as an HTTP 200 response. The browser renders the products page.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button><span class="cm">// web.php — Route definition</span>
+<span class="cls">Route</span>::<span class="fn">get</span>(<span class="str">'/product'</span>, [<span class="cls">ProductController</span>::<span class="kw">class</span>, <span class="str">'index'</span>])
+    -><span class="fn">name</span>(<span class="str">'product.index'</span>);
+
+<span class="cm">// ProductController.php</span>
+<span class="kw">public function</span> <span class="fn">index</span>() {
+    <span class="var">$products</span> = <span class="cls">Product</span>::<span class="fn">all</span>();           <span class="cm">// Model: fetch all rows</span>
+    <span class="kw">return</span> <span class="fn">view</span>(<span class="str">'products.index'</span>,         <span class="cm">// View: blade template</span>
+                <span class="fn">compact</span>(<span class="str">'products'</span>));     <span class="cm">// pass data to view</span>
+}
+
+<span class="cm">// products/index.blade.php</span>
+@<span class="kw">foreach</span> (<span class="var">$products</span> <span class="kw">as</span> <span class="var">$product</span>)
+    &lt;p&gt;{{ <span class="var">$product</span>->name }}&lt;/p&gt;
+@<span class="kw">endforeach</span></pre>
+
+    <table>
+      <tr><th>Component</th><th>File Location</th><th>Responsibility</th></tr>
+      <tr><td>Router</td><td>routes/web.php</td><td>Maps URL /product → Controller method</td></tr>
+      <tr><td>Controller</td><td>app/Http/Controllers/ProductController.php</td><td>Handles request logic, calls Model, returns View</td></tr>
+      <tr><td>Model</td><td>app/Models/Product.php</td><td>Interacts with database, returns data</td></tr>
+      <tr><td>View</td><td>resources/views/products/index.blade.php</td><td>Renders HTML using Blade templating</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ======================= Q3c ======================= -->
+<div id="panel-q3c" class="panel">
+  <div class="card">
+    <div class="card-header">
+      <span class="badge red">Q3 (c)</span>
+      <h2>PHP-MySQL — Student Management System</h2>
+      <span class="marks">Marks-7</span>
+    </div>
+
+    <div class="explain">
+      <p>A complete PHP application that connects to MySQL, displays a form to collect student <strong>name</strong>, <strong>roll number</strong>, and <strong>department</strong>, inserts the record, and shows a confirmation message.</p>
+    </div>
+
+    <pre><button class="copy-btn" onclick="copyCode(this)">copy</button"><span class="tag-c">&lt;?php</span>
+<span class="cm">// ── 1. Database Connection ──────────────────────</span>
+<span class="var">$host</span>   = <span class="str">'localhost'</span>;
+<span class="var">$dbname</span> = <span class="str">'student_db'</span>;
+<span class="var">$user</span>   = <span class="str">'root'</span>;
+<span class="var">$pass</span>   = <span class="str">''</span>;
+
+<span class="var">$conn</span> = <span class="kw">new</span> <span class="cls">mysqli</span>(<span class="var">$host</span>, <span class="var">$user</span>, <span class="var">$pass</span>, <span class="var">$dbname</span>);
+
+<span class="kw">if</span> (<span class="var">$conn</span>->connect_error) {
+    <span class="fn">die</span>(<span class="str">"Connection failed: "</span> . <span class="var">$conn</span>->connect_error);
+}
+
+<span class="cm">// ── 2. Handle Form Submission ───────────────────</span>
+<span class="var">$message</span> = <span class="str">''</span>;
+
+<span class="kw">if</span> (<span class="var">$_SERVER</span>[<span class="str">'REQUEST_METHOD'</span>] === <span class="str">'POST'</span>) {
+    <span class="cm">// Sanitize inputs</span>
+    <span class="var">$name</span>       = <span class="var">$conn</span>-><span class="fn">real_escape_string</span>(<span class="var">$_POST</span>[<span class="str">'name'</span>]);
+    <span class="var">$roll</span>       = <span class="var">$conn</span>-><span class="fn">real_escape_string</span>(<span class="var">$_POST</span>[<span class="str">'roll_number'</span>]);
+    <span class="var">$department</span> = <span class="var">$conn</span>-><span class="fn">real_escape_string</span>(<span class="var">$_POST</span>[<span class="str">'department'</span>]);
+
+    <span class="cm">// Insert into students table</span>
+    <span class="var">$sql</span> = <span class="str">"INSERT INTO students (name, roll_number, department)
+             VALUES ('{$name}', '{$roll}', '{$department}')"</span>;
+
+    <span class="kw">if</span> (<span class="var">$conn</span>-><span class="fn">query</span>(<span class="var">$sql</span>) === <span class="kw">true</span>) {
+        <span class="var">$message</span> = <span class="str">"✅ Student '{$name}' added successfully!"</span>;
+    } <span class="kw">else</span> {
+        <span class="var">$message</span> = <span class="str">"❌ Error: "</span> . <span class="var">$conn</span>->error;
+    }
+}
+<span class="tag-c">?&gt;</span>
+
+<span class="cm">&lt;!-- SQL to create the table --&gt;</span>
+<span class="cm">/*
+CREATE TABLE students (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(100) NOT NULL,
+    roll_number VARCHAR(20)  NOT NULL UNIQUE,
+    department VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+*/</span>
+<span class="tag-c">&lt;!DOCTYPE html&gt;</span>
+<span class="tag-c">&lt;html&gt;</span>
+<span class="tag-c">&lt;body&gt;</span>
+  <span class="tag-c">&lt;h2&gt;</span>Add New Student<span class="tag-c">&lt;/h2&gt;</span>
+
+  <span class="kw">&lt;?php if ($message): ?&gt;</span>
+    <span class="tag-c">&lt;p&gt;</span><span class="kw">&lt;?= $message ?&gt;</span><span class="tag-c">&lt;/p&gt;</span>
+  <span class="kw">&lt;?php endif; ?&gt;</span>
+
+  <span class="tag-c">&lt;form</span> <span class="attr">method</span>=<span class="str">"POST"</span> <span class="attr">action</span>=<span class="str">""</span><span class="tag-c">&gt;</span>
+    <span class="tag-c">&lt;label&gt;</span>Name:<span class="tag-c">&lt;/label&gt;</span>
+    <span class="tag-c">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">name</span>=<span class="str">"name"</span> <span class="attr">required</span><span class="tag-c">&gt;</span>
+
+    <span class="tag-c">&lt;label&gt;</span>Roll Number:<span class="tag-c">&lt;/label&gt;</span>
+    <span class="tag-c">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">name</span>=<span class="str">"roll_number"</span> <span class="attr">required</span><span class="tag-c">&gt;</span>
+
+    <span class="tag-c">&lt;label&gt;</span>Department:<span class="tag-c">&lt;/label&gt;</span>
+    <span class="tag-c">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">name</span>=<span class="str">"department"</span> <span class="attr">required</span><span class="tag-c">&gt;</span>
+
+    <span class="tag-c">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag-c">&gt;</span>Add Student<span class="tag-c">&lt;/button&gt;</span>
+  <span class="tag-c">&lt;/form&gt;</span>
+<span class="tag-c">&lt;/body&gt;</span>
+<span class="tag-c">&lt;/html&gt;</span></pre>
+
+    <div class="demo-area">
+      <h4>Student Form — Live Demo (Simulated)</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Simulates the PHP-MySQL form behavior (data stored in memory for demo):</p>
+      <div class="field">
+        <label>Student Name</label>
+        <input id="sName" placeholder="e.g. Rahim Uddin">
+      </div>
+      <div class="field">
+        <label>Roll Number</label>
+        <input id="sRoll" placeholder="e.g. SE-2025-001">
+      </div>
+      <div class="field">
+        <label>Department</label>
+        <input id="sDept" placeholder="e.g. Software Engineering">
+      </div>
+      <button class="btn" onclick="addStudent()">Add Student</button>
+      <div class="output" id="studentMsg" style="display:none;margin-top:0.8rem;"></div>
+      <div id="studentTable" style="margin-top:1rem;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Navigation ────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── Copy Button ───────────────────────────────────────
+function copyCode(btn) {
+  const pre = btn.parentElement;
+  const text = pre.innerText.replace('copy','').replace('copied','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ── Q1a Event Demos ───────────────────────────────────
+const evtOutput = document.getElementById('evtOutput');
+const logs = [];
+
+function addLog(msg) {
+  logs.unshift('[' + new Date().toLocaleTimeString() + '] ' + msg);
+  if (logs.length > 6) logs.pop();
+  evtOutput.textContent = logs.join('\n');
+}
+
+document.getElementById('evtBtn').addEventListener('click', () => addLog('click — Button was clicked!'));
+document.getElementById('hoverBtn').addEventListener('mouseover', () => addLog('mouseover — Mouse entered the Hover Me button'));
+document.getElementById('hoverBtn').addEventListener('mouseout', () => addLog('mouseout — Mouse left the Hover Me button'));
+document.getElementById('keyInput').addEventListener('keydown', (e) => addLog(`keydown — Key pressed: "${e.key}"`));
+document.addEventListener('DOMContentLoaded', () => {}); // already fired
+
+// ── Q2a Image Click ───────────────────────────────────
+let imgCount = 0;
+let isImg2 = false;
+
+function handleImgClick() {
+  imgCount++;
+  isImg2 = !isImg2;
+  document.getElementById('clickCount').textContent = imgCount;
+  const img = document.getElementById('demo-image');
+  const label = document.getElementById('imgLabel');
+  if (isImg2) {
+    img.classList.add('img2');
+    img.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent);font-size:12px;flex-direction:column;gap:4px;"><span style="font-size:24px;">🌿</span><span>image2.jpg</span></div>`;
+    label.textContent = 'image2.jpg';
+  } else {
+    img.classList.remove('img2');
+    img.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;flex-direction:column;gap:4px;"><span style="font-size:24px;">🖼️</span><span>image1.jpg</span></div>`;
+    label.textContent = 'image1.jpg';
+  }
+}
+
+// ── Q2b PHP Array Average ─────────────────────────────
+function runPhpAvg() {
+  const a1 = document.getElementById('phpArr1').value.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+  const a2 = document.getElementById('phpArr2').value.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+  if (!a1.length || !a2.length) { document.getElementById('phpOutput').textContent = 'Error: Please enter valid numbers.'; return; }
+  const smallest = Math.min(...a1);
+  const largest = Math.max(...a2);
+  const avg = (smallest + largest) / 2;
+  document.getElementById('phpOutput').textContent =
+    `Array 1: [${a1.join(', ')}]  →  min = ${smallest}\n` +
+    `Array 2: [${a2.join(', ')}]  →  max = ${largest}\n` +
+    `─────────────────────────────\n` +
+    `Average = (${smallest} + ${largest}) / 2 = ${avg}`;
+}
+
+// ── Q3a OOP Simulator ─────────────────────────────────
+function runOOP() {
+  const a = parseFloat(document.getElementById('oopA').value) || 0;
+  const b = parseFloat(document.getElementById('oopB').value) || 0;
+  const logs = [
+    `[LOG] Numbers set: ${a} and ${b}`,
+    `[LOG] Performing addition...`,
+    `Result: ${a + b}`
+  ];
+  document.getElementById('oopOutput').textContent = logs.join('\n');
+}
+
+// ── Q3c Student Form ──────────────────────────────────
+const students = [];
+
+function addStudent() {
+  const name = document.getElementById('sName').value.trim();
+  const roll = document.getElementById('sRoll').value.trim();
+  const dept = document.getElementById('sDept').value.trim();
+  const msg = document.getElementById('studentMsg');
+
+  if (!name || !roll || !dept) {
+    msg.style.display = 'block';
+    msg.style.color = 'var(--accent4)';
+    msg.textContent = '❌ Error: All fields are required.';
+    return;
+  }
+
+  if (students.find(s => s.roll === roll)) {
+    msg.style.display = 'block';
+    msg.style.color = 'var(--accent4)';
+    msg.textContent = `❌ Error: Roll number "${roll}" already exists.`;
+    return;
+  }
+
+  students.push({ id: students.length + 1, name, roll, dept });
+  msg.style.display = 'block';
+  msg.style.color = 'var(--accent)';
+  msg.textContent = `✅ Student "${name}" added successfully! (ID: ${students.length})`;
+
+  document.getElementById('sName').value = '';
+  document.getElementById('sRoll').value = '';
+  document.getElementById('sDept').value = '';
+
+  renderTable();
+}
+
+function renderTable() {
+  if (!students.length) return;
+  let html = `<table><tr><th>ID</th><th>Name</th><th>Roll Number</th><th>Department</th></tr>`;
+  students.forEach(s => {
+    html += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.roll}</td><td>${s.dept}</td></tr>`;
+  });
+  html += '</table>';
+  document.getElementById('studentTable').innerHTML = html;
+}
+</script>
+
+</body>
+</html>
