@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SE321 — Complete Exam Solutions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Fraunces:wght@300;400;700;900&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --surface: #ede8e0;
+    --card: #ffffff;
+    --border: #d4c9b8;
+    --ink: #1a1510;
+    --muted: #6b6057;
+    --q1: #1a4a3a;   /* deep green - MVC */
+    --q2a: #2d1a5e;  /* deep purple - JS algo */
+    --q2b: #4a1a1a;  /* deep red - sessions */
+    --q3a: #1a3a5e;  /* deep blue - OOP */
+    --q3b: #3a2a0a;  /* dark amber - CRUD */
+    --accent: #c8451a;
+    --code-bg: #1e1b16;
+    --code-text: #e8e0d0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--ink); font-family:'Fraunces',serif; font-size:16px; line-height:1.7; }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--ink);
+    color: #f5f0e8;
+    padding: 20px 32px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .topbar-left h1 { font-size:20px; font-weight:900; letter-spacing:-0.5px; }
+  .topbar-left p { font-size:12px; color:#9a9080; font-family:'IBM Plex Mono',monospace; margin-top:2px; }
+  .marks-badge { background:#c8451a; color:#fff; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:700; padding:8px 16px; border-radius:4px; }
+
+  /* NAV */
+  .nav {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 0 24px;
+    display:flex; gap:0; overflow-x:auto;
+    position:sticky; top:0; z-index:100;
+  }
+  .nav a {
+    display:block; padding:14px 18px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700;
+    text-decoration:none; color:var(--muted); letter-spacing:.5px;
+    border-bottom:3px solid transparent; white-space:nowrap;
+    transition: all .15s;
+  }
+  .nav a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+  .nav a.q1 { color:var(--q1); } .nav a.q1:hover,.nav a.q1.active { border-bottom-color:var(--q1); }
+  .nav a.q2a { color:var(--q2a); } .nav a.q2a:hover { border-bottom-color:var(--q2a); }
+  .nav a.q2b { color:var(--q2b); } .nav a.q2b:hover { border-bottom-color:var(--q2b); }
+  .nav a.q3a { color:var(--q3a); } .nav a.q3a:hover { border-bottom-color:var(--q3a); }
+  .nav a.q3b { color:var(--q3b); } .nav a.q3b:hover { border-bottom-color:var(--q3b); }
+  .nav a.q3c { color:#3a1a4a; } .nav a.q3c:hover { border-bottom-color:#3a1a4a; }
+
+  /* MAIN */
+  .container { max-width:960px; margin:0 auto; padding:40px 24px 80px; }
+
+  /* QUESTION BLOCK */
+  .q-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:32px;
+    overflow:hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .q-header {
+    padding:20px 28px 18px;
+    border-bottom: 1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+  }
+  .q-label {
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    padding:3px 10px; border-radius:3px; color:#fff; flex-shrink:0; margin-top:3px;
+  }
+  .bg-q1  { background:var(--q1); }
+  .bg-q2a { background:var(--q2a); }
+  .bg-q2b { background:var(--q2b); }
+  .bg-q3a { background:var(--q3a); }
+  .bg-q3b { background:var(--q3b); }
+  .bg-q3c { background:#3a1a4a; }
+  .q-title { font-size:17px; font-weight:700; line-height:1.3; }
+  .q-marks {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700;
+    background:var(--surface); border:1px solid var(--border);
+    padding:4px 12px; border-radius:20px; flex-shrink:0; color:var(--muted);
+  }
+  .q-body { padding:28px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700;
+    letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+    margin-bottom:8px; margin-top:20px;
+  }
+  .section-label:first-child { margin-top:0; }
+
+  p.explain { color:var(--muted); font-size:14px; margin:8px 0 14px; line-height:1.75; }
+  p.explain strong { color:var(--ink); }
+
+  /* CODE */
+  .code-wrap { border-radius:8px; overflow:hidden; margin:14px 0; border:1px solid #333; }
+  .code-top {
+    background:#111; padding:8px 16px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .code-top span { font-family:'IBM Plex Mono',monospace; font-size:10px; color:#666; letter-spacing:1px; text-transform:uppercase; }
+  .dots { display:flex; gap:5px; }
+  .dot { width:9px;height:9px;border-radius:50%; }
+  .dot:nth-child(1){background:#ff5f57;}.dot:nth-child(2){background:#febc2e;}.dot:nth-child(3){background:#28c840;}
+  pre {
+    background:var(--code-bg); color:var(--code-text);
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; line-height:1.8;
+    padding:20px; overflow-x:auto;
+  }
+  .kw{color:#ff79c6;} .fn{color:#50fa7b;} .st{color:#f1fa8c;} .cm{color:#5a6a80;font-style:italic;}
+  .nu{color:#bd93f9;} .va{color:#8be9fd;} .cl{color:#ffb86c;} .op{color:#ff79c6;}
+
+  /* NOTES & TIPS */
+  .note {
+    display:flex; gap:12px; padding:14px 18px; border-radius:6px; margin:14px 0;
+    font-size:13px; line-height:1.7;
+  }
+  .note.green  { background:#f0f9f4; border:1px solid #a8d5b8; color:#1a4a3a; }
+  .note.blue   { background:#f0f4fa; border:1px solid #a8c0d8; color:#1a3a5e; }
+  .note.amber  { background:#fdf8f0; border:1px solid #d8c090; color:#5a3a10; }
+  .note.red    { background:#fdf0f0; border:1px solid #d8a8a8; color:#5a1a1a; }
+  .note-icon   { font-size:18px; flex-shrink:0; }
+  .note strong { font-weight:700; }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:13px; margin:14px 0; }
+  th { background:var(--surface); padding:10px 14px; text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); }
+  td { padding:10px 14px; border:1px solid var(--border); color:var(--muted); vertical-align:top; }
+  td strong { color:var(--ink); }
+  tr:nth-child(even) td { background:#faf8f5; }
+
+  /* DIVIDER INSIDE CARD */
+  .inner-divider { border:none; border-top:1px dashed var(--border); margin:24px 0; }
+
+  /* OUTPUT BOX */
+  .output-box {
+    background:#f0fdf4; border:1px solid #86efac; border-radius:6px;
+    padding:14px 18px; font-family:'IBM Plex Mono',monospace; font-size:13px;
+    line-height:1.8; color:#14532d; margin:12px 0;
+  }
+  .output-box .label { font-size:10px; letter-spacing:2px; color:#16a34a; margin-bottom:6px; font-weight:700; }
+
+  h3 { font-size:16px; font-weight:700; margin:20px 0 10px; }
+  h3:first-child { margin-top:0; }
+  ul { padding-left:20px; }
+  li { margin-bottom:6px; color:var(--muted); font-size:14px; }
+  li strong { color:var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>SE321 — Software Engineering Web Application</h1>
+    <p>DAFFODIL INTERNATIONAL UNIVERSITY · FINAL EXAM FALL 2024 · COMPLETE SOLUTIONS</p>
+  </div>
+  <div class="marks-badge">Total: 40 Marks</div>
+</div>
+
+<nav class="nav">
+  <a href="#q1a" class="q1">Q1(a) MVC — 5M</a>
+  <a href="#q2a" class="q2a">Q2(a) Majority Algo — 5M</a>
+  <a href="#q2b" class="q2b">Q2(b) Sessions vs Cookies — 5M</a>
+  <a href="#q3a-p1" class="q3a">Q3(a) Paper1 — OOP Interface+Trait — 10M</a>
+  <a href="#q3b-p1" class="q3b">Q3(b) Paper1 — MVC Trace — 8M</a>
+  <a href="#q3c-p1" class="q3c">Q3(c) Paper1 — Add Student — 7M</a>
+  <a href="#q3a-p2" class="q3a">Q3(a) Paper2 — OOP Notifier — 10M</a>
+  <a href="#q3b-p2" class="q3b">Q3(b) Paper2 — Full CRUD — 15M</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════
+     Q1(a) — MVC 5 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q1a">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q1">Question 1(a) · Paper 2</div>
+      <div class="q-title">Classify the components of MVC design pattern and describe their individual responsibilities.</div>
+    </div>
+    <div class="q-marks">5 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain"><strong>MVC (Model-View-Controller)</strong> is a software architectural pattern that separates an application into three distinct components to improve organization, maintainability, and testability.</p>
+
+    <table>
+      <tr><th>Component</th><th>Location in Laravel</th><th>Responsibility</th></tr>
+      <tr>
+        <td><strong>Model</strong></td>
+        <td>app/Models/</td>
+        <td>Represents <strong>data and business logic</strong>. Interacts directly with the database. In Laravel, each Model maps to a database table via Eloquent ORM. Does not know about the UI.</td>
+      </tr>
+      <tr>
+        <td><strong>View</strong></td>
+        <td>resources/views/</td>
+        <td>Handles <strong>presentation and UI</strong>. In Laravel, Blade templates (.blade.php) render HTML with dynamic data passed from the Controller. Contains no business logic.</td>
+      </tr>
+      <tr>
+        <td><strong>Controller</strong></td>
+        <td>app/Http/Controllers/</td>
+        <td>Acts as the <strong>middleman / bridge</strong>. Receives HTTP requests via Routes, instructs the Model to fetch/update data, then passes data to the View for rendering.</td>
+      </tr>
+    </table>
+
+    <h3>Request Flow</h3>
+    <div class="code-wrap">
+      <div class="code-top"><span>flow</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre>Browser Request
+      ↓
+  ROUTER (routes/web.php)   ← matches URL to Controller method
+      ↓
+  CONTROLLER                ← processes logic, calls Model
+      ↓
+  MODEL                     ← queries database, returns data
+      ↓
+  CONTROLLER                ← receives data, selects View
+      ↓
+  VIEW (Blade template)     ← renders HTML with data
+      ↓
+Browser Response (HTML page)</pre>
+    </div>
+
+    <div class="note green">
+      <div class="note-icon">✅</div>
+      <div><strong>Key benefit:</strong> Separation of Concerns — each component has one job, making the code easier to maintain, test, and scale. A designer can work on Views while a developer works on Controllers simultaneously.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q2(a) — Majority Element 5 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q2a">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q2a">Question 2(a) · Paper 2</div>
+      <div class="q-title">Find majority element in array in linear time O(n) and O(1) space — Boyer-Moore Voting Algorithm.</div>
+    </div>
+    <div class="q-marks">5 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">The <strong>Boyer-Moore Voting Algorithm</strong> finds the majority element (appears more than ⌊n/2⌋ times) in <strong>O(n) time</strong> and <strong>O(1) space</strong> — no extra arrays needed.</p>
+
+    <h3>Algorithm Idea</h3>
+    <p class="explain">Keep a <strong>candidate</strong> and a <strong>count</strong>. When count reaches 0, pick the current element as new candidate. Because the majority element appears more than half the time, it will always survive.</p>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">function</span> <span class="fn">majorityElement</span>(<span class="va">$nums</span>) {
+    <span class="va">$candidate</span> = <span class="kw">null</span>;
+    <span class="va">$count</span>     = <span class="nu">0</span>;
+
+    <span class="cm">// Phase 1: Find candidate</span>
+    <span class="kw">foreach</span> (<span class="va">$nums</span> <span class="kw">as</span> <span class="va">$num</span>) {
+        <span class="kw">if</span> (<span class="va">$count</span> == <span class="nu">0</span>) {
+            <span class="va">$candidate</span> = <span class="va">$num</span>;  <span class="cm">// pick new candidate</span>
+        }
+        <span class="va">$count</span> += (<span class="va">$num</span> == <span class="va">$candidate</span>) ? <span class="nu">1</span> : -<span class="nu">1</span>;
+    }
+
+    <span class="cm">// Phase 2: candidate is guaranteed majority (given by problem)</span>
+    <span class="kw">return</span> <span class="va">$candidate</span>;
+}
+
+<span class="cm">// Test Example 1: [3,2,3]</span>
+<span class="fn">echo</span> <span class="fn">majorityElement</span>([<span class="nu">3</span>,<span class="nu">2</span>,<span class="nu">3</span>]);  <span class="cm">// Output: 3</span>
+
+<span class="cm">// Test Example 2: [2,2,1,1,1,2,2]</span>
+<span class="fn">echo</span> <span class="fn">majorityElement</span>([<span class="nu">2</span>,<span class="nu">2</span>,<span class="nu">1</span>,<span class="nu">1</span>,<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">2</span>]);  <span class="cm">// Output: 2</span>
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <h3>Step-by-step Trace — [3, 2, 3]</h3>
+    <table>
+      <tr><th>Step</th><th>num</th><th>count before</th><th>Action</th><th>candidate</th><th>count after</th></tr>
+      <tr><td>1</td><td>3</td><td>0</td><td>count=0 → pick 3</td><td>3</td><td>1</td></tr>
+      <tr><td>2</td><td>2</td><td>1</td><td>2 ≠ 3 → count--</td><td>3</td><td>0</td></tr>
+      <tr><td>3</td><td>3</td><td>0</td><td>count=0 → pick 3</td><td>3</td><td>1</td></tr>
+    </table>
+    <div class="output-box"><div class="label">OUTPUT</div>Majority Element = 3 ✓</div>
+
+    <div class="note blue">
+      <div class="note-icon">💡</div>
+      <div><strong>Why O(1) space?</strong> We only use 2 variables (candidate, count) regardless of array size. <strong>Why O(n) time?</strong> We loop through the array exactly once.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q2(b) — Sessions vs Cookies 5 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q2b">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q2b">Question 2(b) · Paper 2</div>
+      <div class="q-title">Organize the key points that distinguish Sessions from Cookies in PHP.</div>
+    </div>
+    <div class="q-marks">5 Marks</div>
+  </div>
+  <div class="q-body">
+    <table>
+      <tr><th>Feature</th><th>Sessions</th><th>Cookies</th></tr>
+      <tr><td><strong>Storage Location</strong></td><td>Stored on the <strong>server</strong></td><td>Stored in the <strong>browser (client)</strong></td></tr>
+      <tr><td><strong>Security</strong></td><td><strong>More secure</strong> — data not exposed to user</td><td>Less secure — user can see/modify data</td></tr>
+      <tr><td><strong>Data Size</strong></td><td>No practical limit</td><td>Limited to ~4KB per cookie</td></tr>
+      <tr><td><strong>Lifetime</strong></td><td>Ends when browser closes (by default)</td><td>Can persist for days/years (set expiry)</td></tr>
+      <tr><td><strong>Speed</strong></td><td>Slightly slower (server-side lookup)</td><td>Faster (browser sends with every request)</td></tr>
+      <tr><td><strong>Use Case</strong></td><td>Login state, shopping cart, sensitive data</td><td>Remember Me, theme preference, analytics</td></tr>
+    </table>
+
+    <h3>PHP Code Examples</h3>
+    <div class="code-wrap">
+      <div class="code-top"><span>php — sessions</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="fn">session_start</span>();            <span class="cm">// MUST call at top of every page</span>
+
+<span class="cm">// Set session variable</span>
+<span class="va">$_SESSION</span>[<span class="st">"username"</span>] = <span class="st">"Alice"</span>;
+<span class="va">$_SESSION</span>[<span class="st">"role"</span>]     = <span class="st">"admin"</span>;
+
+<span class="cm">// Read session</span>
+<span class="fn">echo</span> <span class="va">$_SESSION</span>[<span class="st">"username"</span>];  <span class="cm">// Alice</span>
+
+<span class="cm">// Destroy session (logout)</span>
+<span class="fn">session_destroy</span>();
+<span class="cm">?&gt;</span></pre>
+    </div>
+    <div class="code-wrap">
+      <div class="code-top"><span>php — cookies</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// Set cookie (name, value, expiry time)</span>
+<span class="fn">setcookie</span>(<span class="st">"theme"</span>, <span class="st">"dark"</span>, <span class="fn">time</span>() + (<span class="nu">86400</span> * <span class="nu">30</span>)); <span class="cm">// 30 days</span>
+
+<span class="cm">// Read cookie</span>
+<span class="kw">if</span> (<span class="fn">isset</span>(<span class="va">$_COOKIE</span>[<span class="st">"theme"</span>])) {
+    <span class="fn">echo</span> <span class="va">$_COOKIE</span>[<span class="st">"theme"</span>];  <span class="cm">// dark</span>
+}
+
+<span class="cm">// Delete cookie (set expiry to past)</span>
+<span class="fn">setcookie</span>(<span class="st">"theme"</span>, <span class="st">""</span>, <span class="fn">time</span>() - <span class="nu">3600</span>);
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <div class="note amber">
+      <div class="note-icon">⭐</div>
+      <div><strong>Key rule to remember:</strong> Use <strong>Sessions</strong> for sensitive data like login status. Use <strong>Cookies</strong> for non-sensitive preferences that should persist across browser sessions.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q3(a) Paper 1 — Interface + Trait OOP
+═══════════════════════════════════════ -->
+<div class="q-block" id="q3a-p1">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q3a">Question 3(a) · Paper 1</div>
+      <div class="q-title">PHP OOP — Interface Input, Trait Logger, Class Addition that implements both.</div>
+    </div>
+    <div class="q-marks">10 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">This question tests <strong>Interfaces</strong> (contracts a class must follow) and <strong>Traits</strong> (reusable code blocks). An interface defines method signatures but no body. A trait provides method implementations to reuse across classes.</p>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — complete solution</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+
+<span class="cm">// ─────────────────────────────────────
+// i. Interface Input
+//    Defines a CONTRACT: any class that implements
+//    this MUST have a setNumbers() method.
+// ─────────────────────────────────────</span>
+<span class="kw">interface</span> <span class="cl">Input</span> {
+    <span class="kw">public function</span> <span class="fn">setNumbers</span>(<span class="va">$a</span>, <span class="va">$b</span>);
+}
+
+<span class="cm">// ─────────────────────────────────────
+// ii. Trait Logger
+//     A reusable block of code.
+//     Any class that "uses" this trait gets the log() method.
+// ─────────────────────────────────────</span>
+<span class="kw">trait</span> <span class="cl">Logger</span> {
+    <span class="kw">public function</span> <span class="fn">log</span>(<span class="va">$message</span>) {
+        <span class="fn">echo</span> <span class="st">"[LOG] "</span> . <span class="va">$message</span> . <span class="st">"&lt;br&gt;"</span>;
+    }
+}
+
+<span class="cm">// ─────────────────────────────────────
+// iii. Class Addition
+//      - implements Input (must define setNumbers)
+//      - uses Logger trait (gets log() method for free)
+// ─────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cl">Addition</span> <span class="kw">implements</span> <span class="cl">Input</span> {
+    <span class="kw">use</span> <span class="cl">Logger</span>;  <span class="cm">// include the Logger trait</span>
+
+    <span class="kw">private</span> <span class="va">$a</span>;
+    <span class="kw">private</span> <span class="va">$b</span>;
+
+    <span class="cm">// Implementing the interface method (required)</span>
+    <span class="kw">public function</span> <span class="fn">setNumbers</span>(<span class="va">$a</span>, <span class="va">$b</span>) {
+        <span class="va">$this</span>-&gt;a = <span class="va">$a</span>;
+        <span class="va">$this</span>-&gt;b = <span class="va">$b</span>;
+        <span class="va">$this</span>-&gt;<span class="fn">log</span>(<span class="st">"Numbers set: a = $a, b = $b"</span>);
+    }
+
+    <span class="cm">// Method to calculate and return the sum</span>
+    <span class="kw">public function</span> <span class="fn">calculate</span>() {
+        <span class="va">$sum</span> = <span class="va">$this</span>-&gt;a + <span class="va">$this</span>-&gt;b;
+        <span class="va">$this</span>-&gt;<span class="fn">log</span>(<span class="st">"Calculating: {$this-&gt;a} + {$this-&gt;b} = $sum"</span>);
+        <span class="kw">return</span> <span class="va">$sum</span>;
+    }
+}
+
+<span class="cm">// ─────────────────────────────────────
+// Instantiate and use the class
+// ─────────────────────────────────────</span>
+<span class="va">$obj</span> = <span class="kw">new</span> <span class="cl">Addition</span>();
+<span class="va">$obj</span>-&gt;<span class="fn">setNumbers</span>(<span class="nu">15</span>, <span class="nu">25</span>);
+<span class="va">$result</span> = <span class="va">$obj</span>-&gt;<span class="fn">calculate</span>();
+
+<span class="fn">echo</span> <span class="st">"Result: $result"</span>;
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <div class="output-box">
+      <div class="label">OUTPUT</div>
+      [LOG] Numbers set: a = 15, b = 25<br>
+      [LOG] Calculating: 15 + 25 = 40<br>
+      Result: 40
+    </div>
+
+    <h3>Key Concepts Explained</h3>
+    <table>
+      <tr><th>Concept</th><th>Explanation</th></tr>
+      <tr><td><strong>interface</strong></td><td>A contract — lists methods a class MUST implement. No method bodies. Use keyword <code>implements</code>.</td></tr>
+      <tr><td><strong>trait</strong></td><td>A reusable block of methods. Not a class, cannot be instantiated. Include with <code>use TraitName</code>.</td></tr>
+      <tr><td><strong>implements</strong></td><td>Used when a class fulfills an interface contract.</td></tr>
+      <tr><td><strong>use</strong> (in class)</td><td>Brings trait methods into the class.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q3(b) Paper 1 — MVC Trace 8 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q3b-p1">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q3b">Question 3(b) · Paper 1</div>
+      <div class="q-title">Trace the role and responsibilities of each component when a browser requests /product in the given Laravel MVC setup.</div>
+    </div>
+    <div class="q-marks">8 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">Given: <code>Route::get('/product', [ProductController::class, 'index'])->name('product.index')</code> and the controller fetches all products and returns the view.</p>
+
+    <h3>Complete Request Trace</h3>
+    <div class="code-wrap">
+      <div class="code-top"><span>step-by-step trace</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">STEP 1 — BROWSER</span>
+User types: http://yourapp.com/product
+→ HTTP GET request is sent to the Laravel server.
+
+<span class="cm">STEP 2 — ROUTER (routes/web.php)</span>
+Route::get('/product', [ProductController::class, 'index'])
+  →name('product.index');
+
+Laravel matches the URL /product with this route.
+It directs the request to ProductController's index() method.
+The route is named 'product.index' for easy URL generation.
+
+<span class="cm">STEP 3 — CONTROLLER (app/Http/Controllers/ProductController.php)</span>
+public function index() {
+    $products = Product::all();
+    return view('products.index', compact('products'));
+}
+
+Responsibility: Acts as the middleman.
+  - Receives the request.
+  - Calls Product::all() on the Model to get all products.
+  - Passes the data to the View using compact().
+
+<span class="cm">STEP 4 — MODEL (app/Models/Product.php)</span>
+Product::all()
+  → Eloquent ORM runs: SELECT * FROM products;
+  → Returns a Collection of all product records.
+  → Sends the data back to the Controller.
+
+Responsibility: Handles all database interaction.
+  Does NOT know how data will be displayed.
+
+<span class="cm">STEP 5 — VIEW (resources/views/products/index.blade.php)</span>
+Receives: $products (collection of Product objects)
+Renders HTML:
+  @foreach($products as $product)
+      {{ $product->name }} ...
+  @endforeach
+
+Responsibility: Presents data to the user.
+  Contains ONLY presentation logic (Blade directives).
+  No database queries here.
+
+<span class="cm">STEP 6 — RESPONSE</span>
+Laravel sends the rendered HTML page back to the browser.
+User sees the list of products on screen.</pre>
+    </div>
+
+    <h3>Summary Table</h3>
+    <table>
+      <tr><th>Component</th><th>File</th><th>Role in /product request</th></tr>
+      <tr><td><strong>Router</strong></td><td>routes/web.php</td><td>Matches GET /product → routes to ProductController@index</td></tr>
+      <tr><td><strong>Controller</strong></td><td>ProductController.php</td><td>Calls Model, receives data, selects View, passes data</td></tr>
+      <tr><td><strong>Model</strong></td><td>Product.php</td><td>Runs SELECT * FROM products, returns collection to Controller</td></tr>
+      <tr><td><strong>View</strong></td><td>products/index.blade.php</td><td>Renders HTML table/list of products for the browser</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q3(c) Paper 1 — Add Student PHP MySQL
+═══════════════════════════════════════ -->
+<div class="q-block" id="q3c-p1">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q3c">Question 3(c) · Paper 1</div>
+      <div class="q-title">PHP-MySQL app to add new students — name, roll number, department with confirmation.</div>
+    </div>
+    <div class="q-marks">7 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">A complete single-file PHP app that connects to MySQL, shows a form, inserts student data, and displays a confirmation message.</p>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>sql — create table first</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">-- Run this in phpMyAdmin or MySQL console</span>
+<span class="kw">CREATE DATABASE</span> school_db;
+<span class="kw">USE</span> school_db;
+
+<span class="kw">CREATE TABLE</span> students (
+    id         <span class="cl">INT</span> <span class="kw">AUTO_INCREMENT PRIMARY KEY</span>,
+    name       <span class="cl">VARCHAR</span>(<span class="nu">100</span>) <span class="kw">NOT NULL</span>,
+    roll_no    <span class="cl">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT NULL</span>,
+    department <span class="cl">VARCHAR</span>(<span class="nu">100</span>) <span class="kw">NOT NULL</span>
+);</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — add_student.php (complete file)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// ── 1. DATABASE CONNECTION ──────────────</span>
+<span class="va">$conn</span> = <span class="kw">new</span> <span class="cl">mysqli</span>(<span class="st">"localhost"</span>, <span class="st">"root"</span>, <span class="st">""</span>, <span class="st">"school_db"</span>);
+
+<span class="kw">if</span> (<span class="va">$conn</span>-&gt;connect_error) {
+    <span class="fn">die</span>(<span class="st">"Connection failed: "</span> . <span class="va">$conn</span>-&gt;connect_error);
+}
+
+<span class="va">$message</span> = <span class="st">""</span>;
+
+<span class="cm">// ── 2. HANDLE FORM SUBMISSION ───────────</span>
+<span class="kw">if</span> (<span class="va">$_SERVER</span>[<span class="st">"REQUEST_METHOD"</span>] == <span class="st">"POST"</span>) {
+    <span class="va">$name</span>       = <span class="fn">htmlspecialchars</span>(<span class="fn">trim</span>(<span class="va">$_POST</span>[<span class="st">"name"</span>]));
+    <span class="va">$roll_no</span>    = <span class="fn">htmlspecialchars</span>(<span class="fn">trim</span>(<span class="va">$_POST</span>[<span class="st">"roll_no"</span>]));
+    <span class="va">$department</span> = <span class="fn">htmlspecialchars</span>(<span class="fn">trim</span>(<span class="va">$_POST</span>[<span class="st">"department"</span>]));
+
+    <span class="kw">if</span> (<span class="fn">empty</span>(<span class="va">$name</span>) || <span class="fn">empty</span>(<span class="va">$roll_no</span>) || <span class="fn">empty</span>(<span class="va">$department</span>)) {
+        <span class="va">$message</span> = <span class="st">"&lt;p style='color:red'&gt;All fields are required!&lt;/p&gt;"</span>;
+    } <span class="kw">else</span> {
+        <span class="cm">// Prepared statement — safe from SQL injection</span>
+        <span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(
+            <span class="st">"INSERT INTO students (name, roll_no, department) VALUES (?, ?, ?)"</span>
+        );
+        <span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"sss"</span>, <span class="va">$name</span>, <span class="va">$roll_no</span>, <span class="va">$department</span>);
+
+        <span class="kw">if</span> (<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>()) {
+            <span class="va">$message</span> = <span class="st">"&lt;p style='color:green'&gt;
+                ✅ Student &lt;strong&gt;$name&lt;/strong&gt; added successfully!
+                (ID: {$conn-&gt;insert_id})&lt;/p&gt;"</span>;
+        } <span class="kw">else</span> {
+            <span class="va">$message</span> = <span class="st">"&lt;p style='color:red'&gt;Error: "</span> . <span class="va">$stmt</span>-&gt;error . <span class="st">"&lt;/p&gt;"</span>;
+        }
+        <span class="va">$stmt</span>-&gt;<span class="fn">close</span>();
+    }
+}
+<span class="va">$conn</span>-&gt;<span class="fn">close</span>();
+<span class="cm">?&gt;</span>
+
+<span class="cm">&lt;!-- ── 3. HTML FORM ──────────────────── --&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Add Student&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;Add New Student&lt;/h2&gt;
+
+  &lt;!-- Confirmation message --&gt;
+  &lt;?php <span class="fn">echo</span> <span class="va">$message</span>; ?&gt;
+
+  &lt;form method=<span class="st">"POST"</span> action=<span class="st">""</span>&gt;
+    &lt;label&gt;Name:&lt;/label&gt;&lt;br&gt;
+    &lt;input type=<span class="st">"text"</span> name=<span class="st">"name"</span> required&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label&gt;Roll Number:&lt;/label&gt;&lt;br&gt;
+    &lt;input type=<span class="st">"text"</span> name=<span class="st">"roll_no"</span> required&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label&gt;Department:&lt;/label&gt;&lt;br&gt;
+    &lt;input type=<span class="st">"text"</span> name=<span class="st">"department"</span> required&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;button type=<span class="st">"submit"</span>&gt;Add Student&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+
+    <div class="note green">
+      <div class="note-icon">✅</div>
+      <div><strong>What this covers:</strong> Database connection → Form display → POST handling → Input sanitization → Prepared statement INSERT → Confirmation message display. All 4 requirements fulfilled.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q3(a) Paper 2 — OOP Notifier 10 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q3a-p2">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q3a">Question 3(a) · Paper 2</div>
+      <div class="q-title">PHP OOP Notification System — Interface Notifier with EmailNotifier, SMSNotifier, PushNotifier.</div>
+    </div>
+    <div class="q-marks">10 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">Design pattern: one <strong>interface</strong> (Notifier) enforces the method signature, three <strong>concrete classes</strong> each implement it differently. This is the <strong>Strategy / Polymorphism</strong> pattern.</p>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — complete solution</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+
+<span class="cm">// ─────────────────────────────────────────────────
+// Interface: Notifier
+// Any class implementing this MUST have sendNotification()
+// ─────────────────────────────────────────────────</span>
+<span class="kw">interface</span> <span class="cl">Notifier</span> {
+    <span class="kw">public function</span> <span class="fn">sendNotification</span>(<span class="va">$message</span>, <span class="va">$recipient</span>);
+}
+
+<span class="cm">// ─────────────────────────────────────────────────
+// Concrete Class 1: EmailNotifier
+// ─────────────────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cl">EmailNotifier</span> <span class="kw">implements</span> <span class="cl">Notifier</span> {
+    <span class="kw">public function</span> <span class="fn">sendNotification</span>(<span class="va">$message</span>, <span class="va">$recipient</span>) {
+        <span class="fn">echo</span> <span class="st">"📧 EMAIL to {$recipient}: {$message}&lt;br&gt;"</span>;
+    }
+}
+
+<span class="cm">// ─────────────────────────────────────────────────
+// Concrete Class 2: SMSNotifier
+// ─────────────────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cl">SMSNotifier</span> <span class="kw">implements</span> <span class="cl">Notifier</span> {
+    <span class="kw">public function</span> <span class="fn">sendNotification</span>(<span class="va">$message</span>, <span class="va">$recipient</span>) {
+        <span class="fn">echo</span> <span class="st">"📱 SMS to {$recipient}: {$message}&lt;br&gt;"</span>;
+    }
+}
+
+<span class="cm">// ─────────────────────────────────────────────────
+// Concrete Class 3: PushNotifier
+// ─────────────────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cl">PushNotifier</span> <span class="kw">implements</span> <span class="cl">Notifier</span> {
+    <span class="kw">public function</span> <span class="fn">sendNotification</span>(<span class="va">$message</span>, <span class="va">$recipient</span>) {
+        <span class="fn">echo</span> <span class="st">"🔔 PUSH to {$recipient}: {$message}&lt;br&gt;"</span>;
+    }
+}
+
+<span class="cm">// ─────────────────────────────────────────────────
+// Usage — Polymorphism in action
+// Each object is treated as a Notifier type
+// ─────────────────────────────────────────────────</span>
+<span class="va">$notifiers</span> = [
+    <span class="kw">new</span> <span class="cl">EmailNotifier</span>(),
+    <span class="kw">new</span> <span class="cl">SMSNotifier</span>(),
+    <span class="kw">new</span> <span class="cl">PushNotifier</span>(),
+];
+
+<span class="kw">foreach</span> (<span class="va">$notifiers</span> <span class="kw">as</span> <span class="va">$notifier</span>) {
+    <span class="va">$notifier</span>-&gt;<span class="fn">sendNotification</span>(<span class="st">"Exam starts tomorrow!"</span>, <span class="st">"Alice"</span>);
+}
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <div class="output-box">
+      <div class="label">OUTPUT</div>
+      📧 EMAIL to Alice: Exam starts tomorrow!<br>
+      📱 SMS to Alice: Exam starts tomorrow!<br>
+      🔔 PUSH to Alice: Exam starts tomorrow!
+    </div>
+
+    <div class="note blue">
+      <div class="note-icon">💡</div>
+      <div><strong>Why interface?</strong> The interface guarantees every notifier class has a <code>sendNotification()</code> method with the same signature. This allows <strong>polymorphism</strong> — you can loop through different notifiers and call the same method on each without knowing the exact type.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Q3(b) Paper 2 — Full CRUD 15 Marks
+═══════════════════════════════════════ -->
+<div class="q-block" id="q3b-p2">
+  <div class="q-header">
+    <div>
+      <div class="q-label bg-q3b">Question 3(b) · Paper 2</div>
+      <div class="q-title">Full PHP-MySQL Student Record CRUD — Add, View all, Edit (pre-filled form), Delete.</div>
+    </div>
+    <div class="q-marks">15 Marks</div>
+  </div>
+  <div class="q-body">
+    <p class="explain">This is the biggest question — a complete CRUD application with 4 operations. Here is the full, working solution organized by file.</p>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>sql — create table</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="kw">CREATE DATABASE</span> student_db;
+<span class="kw">USE</span> student_db;
+
+<span class="kw">CREATE TABLE</span> students (
+    id      <span class="cl">INT</span> <span class="kw">AUTO_INCREMENT PRIMARY KEY</span>,
+    name    <span class="cl">VARCHAR</span>(<span class="nu">100</span>) <span class="kw">NOT NULL</span>,
+    age     <span class="cl">INT</span>          <span class="kw">NOT NULL</span>,
+    grade   <span class="cl">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">NOT NULL</span>,
+    email   <span class="cl">VARCHAR</span>(<span class="nu">150</span>) <span class="kw">NOT NULL</span>
+);</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — db.php (database connection — shared file)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="cm">// db.php — include this in every file</span>
+<span class="va">$conn</span> = <span class="kw">new</span> <span class="cl">mysqli</span>(<span class="st">"localhost"</span>, <span class="st">"root"</span>, <span class="st">""</span>, <span class="st">"student_db"</span>);
+<span class="kw">if</span> (<span class="va">$conn</span>-&gt;connect_error) {
+    <span class="fn">die</span>(<span class="st">"Connection failed: "</span> . <span class="va">$conn</span>-&gt;connect_error);
+}
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — index.php (VIEW ALL + ADD + DELETE links)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span> <span class="kw">require</span> <span class="st">'db.php'</span>; <span class="cm">?&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Student Records&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;All Students&lt;/h2&gt;
+&lt;a href=<span class="st">"add.php"</span>&gt;+ Add New Student&lt;/a&gt;
+&lt;br&gt;&lt;br&gt;
+
+&lt;table border=<span class="st">"1"</span>&gt;
+  &lt;tr&gt;
+    &lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Age&lt;/th&gt;&lt;th&gt;Grade&lt;/th&gt;&lt;th&gt;Email&lt;/th&gt;&lt;th&gt;Actions&lt;/th&gt;
+  &lt;/tr&gt;
+  <span class="cm">&lt;?php</span>
+    <span class="cm">// READ — fetch all students</span>
+    <span class="va">$result</span> = <span class="va">$conn</span>-&gt;<span class="fn">query</span>(<span class="st">"SELECT * FROM students"</span>);
+    <span class="kw">while</span>(<span class="va">$row</span> = <span class="va">$result</span>-&gt;<span class="fn">fetch_assoc</span>()): <span class="cm">?&gt;</span>
+  &lt;tr&gt;
+    &lt;td&gt;<span class="cm">&lt;?= $row['id'] ?&gt;</span>&lt;/td&gt;
+    &lt;td&gt;<span class="cm">&lt;?= $row['name'] ?&gt;</span>&lt;/td&gt;
+    &lt;td&gt;<span class="cm">&lt;?= $row['age'] ?&gt;</span>&lt;/td&gt;
+    &lt;td&gt;<span class="cm">&lt;?= $row['grade'] ?&gt;</span>&lt;/td&gt;
+    &lt;td&gt;<span class="cm">&lt;?= $row['email'] ?&gt;</span>&lt;/td&gt;
+    &lt;td&gt;
+      &lt;a href=<span class="st">"edit.php?id=&lt;?= $row['id'] ?&gt;"</span>&gt;Edit&lt;/a&gt; |
+      &lt;a href=<span class="st">"delete.php?id=&lt;?= $row['id'] ?&gt;"</span>
+         onclick=<span class="st">"return confirm('Delete this student?')"</span>&gt;Delete&lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  <span class="cm">&lt;?php</span> <span class="kw">endwhile</span>; <span class="cm">?&gt;</span>
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — add.php (CREATE)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">require</span> <span class="st">'db.php'</span>;
+
+<span class="kw">if</span> (<span class="va">$_SERVER</span>[<span class="st">"REQUEST_METHOD"</span>] == <span class="st">"POST"</span>) {
+    <span class="va">$name</span>  = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'name'</span>]);
+    <span class="va">$age</span>   = (int)<span class="va">$_POST</span>[<span class="st">'age'</span>];
+    <span class="va">$grade</span> = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'grade'</span>]);
+    <span class="va">$email</span> = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'email'</span>]);
+
+    <span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(
+        <span class="st">"INSERT INTO students (name, age, grade, email) VALUES (?, ?, ?, ?)"</span>
+    );
+    <span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"siss"</span>, <span class="va">$name</span>, <span class="va">$age</span>, <span class="va">$grade</span>, <span class="va">$email</span>);
+    <span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+
+    <span class="fn">header</span>(<span class="st">"Location: index.php"</span>); <span class="cm">// redirect back</span>
+    <span class="fn">exit</span>();
+}
+<span class="cm">?&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Add Student&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Add New Student&lt;/h2&gt;
+&lt;form method=<span class="st">"POST"</span>&gt;
+  Name:  &lt;input type=<span class="st">"text"</span>   name=<span class="st">"name"</span>  required&gt;&lt;br&gt;&lt;br&gt;
+  Age:   &lt;input type=<span class="st">"number"</span> name=<span class="st">"age"</span>   required&gt;&lt;br&gt;&lt;br&gt;
+  Grade: &lt;input type=<span class="st">"text"</span>   name=<span class="st">"grade"</span> required&gt;&lt;br&gt;&lt;br&gt;
+  Email: &lt;input type=<span class="st">"email"</span>  name=<span class="st">"email"</span> required&gt;&lt;br&gt;&lt;br&gt;
+  &lt;button type=<span class="st">"submit"</span>&gt;Add Student&lt;/button&gt;
+  &lt;a href=<span class="st">"index.php"</span>&gt;Cancel&lt;/a&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — edit.php (UPDATE — pre-filled form)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">require</span> <span class="st">'db.php'</span>;
+<span class="va">$id</span> = (int)<span class="va">$_GET</span>[<span class="st">'id'</span>];
+
+<span class="cm">// Handle UPDATE on form submit</span>
+<span class="kw">if</span> (<span class="va">$_SERVER</span>[<span class="st">"REQUEST_METHOD"</span>] == <span class="st">"POST"</span>) {
+    <span class="va">$name</span>  = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'name'</span>]);
+    <span class="va">$age</span>   = (int)<span class="va">$_POST</span>[<span class="st">'age'</span>];
+    <span class="va">$grade</span> = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'grade'</span>]);
+    <span class="va">$email</span> = <span class="fn">htmlspecialchars</span>(<span class="va">$_POST</span>[<span class="st">'email'</span>]);
+    <span class="va">$id</span>    = (int)<span class="va">$_POST</span>[<span class="st">'id'</span>];
+
+    <span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(
+        <span class="st">"UPDATE students SET name=?, age=?, grade=?, email=? WHERE id=?"</span>
+    );
+    <span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"sissi"</span>, <span class="va">$name</span>, <span class="va">$age</span>, <span class="va">$grade</span>, <span class="va">$email</span>, <span class="va">$id</span>);
+    <span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+    <span class="fn">header</span>(<span class="st">"Location: index.php"</span>);
+    <span class="fn">exit</span>();
+}
+
+<span class="cm">// Fetch current values to PRE-FILL the form</span>
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"SELECT * FROM students WHERE id = ?"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"i"</span>, <span class="va">$id</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+<span class="va">$student</span> = <span class="va">$stmt</span>-&gt;<span class="fn">get_result</span>()-&gt;<span class="fn">fetch_assoc</span>();
+<span class="cm">?&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Edit Student&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Edit Student&lt;/h2&gt;
+&lt;form method=<span class="st">"POST"</span>&gt;
+  &lt;!-- Hidden field to pass the ID --&gt;
+  &lt;input type=<span class="st">"hidden"</span> name=<span class="st">"id"</span> value=<span class="st">"&lt;?= $student['id'] ?&gt;"</span>&gt;
+
+  <span class="cm">&lt;!-- value="" pre-fills the form with current data --&gt;</span>
+  Name:  &lt;input type=<span class="st">"text"</span>   name=<span class="st">"name"</span>  value=<span class="st">"&lt;?= $student['name']  ?&gt;"</span>&gt;&lt;br&gt;&lt;br&gt;
+  Age:   &lt;input type=<span class="st">"number"</span> name=<span class="st">"age"</span>   value=<span class="st">"&lt;?= $student['age']   ?&gt;"</span>&gt;&lt;br&gt;&lt;br&gt;
+  Grade: &lt;input type=<span class="st">"text"</span>   name=<span class="st">"grade"</span> value=<span class="st">"&lt;?= $student['grade'] ?&gt;"</span>&gt;&lt;br&gt;&lt;br&gt;
+  Email: &lt;input type=<span class="st">"email"</span>  name=<span class="st">"email"</span> value=<span class="st">"&lt;?= $student['email'] ?&gt;"</span>&gt;&lt;br&gt;&lt;br&gt;
+  &lt;button type=<span class="st">"submit"</span>&gt;Update Student&lt;/button&gt;
+  &lt;a href=<span class="st">"index.php"</span>&gt;Cancel&lt;/a&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-top"><span>php — delete.php (DELETE)</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <pre><span class="cm">&lt;?php</span>
+<span class="kw">require</span> <span class="st">'db.php'</span>;
+<span class="va">$id</span> = (int)<span class="va">$_GET</span>[<span class="st">'id'</span>]; <span class="cm">// cast to int for safety</span>
+
+<span class="va">$stmt</span> = <span class="va">$conn</span>-&gt;<span class="fn">prepare</span>(<span class="st">"DELETE FROM students WHERE id = ?"</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">bind_param</span>(<span class="st">"i"</span>, <span class="va">$id</span>);
+<span class="va">$stmt</span>-&gt;<span class="fn">execute</span>();
+
+<span class="fn">header</span>(<span class="st">"Location: index.php"</span>); <span class="cm">// redirect back to list</span>
+<span class="fn">exit</span>();
+<span class="cm">?&gt;</span></pre>
+    </div>
+
+    <h3>File Structure Summary</h3>
+    <table>
+      <tr><th>File</th><th>CRUD Operation</th><th>Key Code</th></tr>
+      <tr><td><strong>index.php</strong></td><td>READ (View All)</td><td><code>SELECT * FROM students</code> + table display</td></tr>
+      <tr><td><strong>add.php</strong></td><td>CREATE (Add)</td><td>Form + <code>INSERT INTO students</code></td></tr>
+      <tr><td><strong>edit.php</strong></td><td>UPDATE (Edit)</td><td>Pre-filled form + <code>UPDATE students SET</code></td></tr>
+      <tr><td><strong>delete.php</strong></td><td>DELETE (Remove)</td><td><code>DELETE FROM students WHERE id=?</code></td></tr>
+      <tr><td><strong>db.php</strong></td><td>Connection</td><td><code>new mysqli(...)</code> — shared across files</td></tr>
+    </table>
+
+    <div class="note green">
+      <div class="note-icon">⭐</div>
+      <div><strong>Examiner key points:</strong> (1) All queries use <strong>prepared statements</strong> for security. (2) Edit form uses <strong>value="&lt;?= $student['field'] ?&gt;"</strong> to pre-fill. (3) Delete uses <strong>confirmation dialog</strong> before deleting. (4) After each operation, <strong>header("Location: index.php")</strong> redirects back to the list.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div style="text-align:center; padding:30px; background:var(--surface); border-top:1px solid var(--border); font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted);">
+  SE321 · Daffodil International University · Fall 2024 · <span style="color:var(--accent)">All questions solved ✓</span>
+</div>
+
+</body>
+</html>
